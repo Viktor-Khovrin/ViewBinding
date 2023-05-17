@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="card_height">170dp</dimen>
+    <dimen name="card_width">120dp</dimen>
+    <dimen name="card_radius">15dp</dimen>
+    <dimen name="layout_height">100dp</dimen>
+    <dimen name="text_size">12sp</dimen>
+    <dimen name="donat_dimen">50dp</dimen>
+    <dimen name="donat_textZ">11dp</dimen>
+</resources>

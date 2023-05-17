@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">FilmsSearch</string>
+    <string name="disclaimer">Картинки взяты с https://www.movieposters.com/</string>
+    <string name="page_title">Найди!</string>
+    <string name="menu_settings_title">Настройки</string>
+    <string name="menu_favorites_title">Избранное</string>
+    <string name="menu_watch_later_title">Просмотреть позже</string>
+    <string name="menu_selections_title">Подборки</string>
+    <string name="on_back_pressed">Нажмите дважды для выхода</string>
+    <string name="description">Image View</string>
+</resources>
