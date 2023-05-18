@@ -10,6 +10,7 @@ import com.example.filmsSearch.domain.Film
 import com.example.filmsSearch.view.fragments.DetailsFragment
 import com.example.filmsSearch.view.fragments.FavoritesFragment
 import com.example.filmsSearch.view.fragments.HomeFragment
+import com.example.filmsSearch.view.fragments.SelectionsFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -58,7 +59,7 @@ class MainActivity : AppCompatActivity() {
                     /*Toast.makeText(this,R.string.menu_selections_title, Toast.LENGTH_SHORT).show()*/
                     val tag = "selections"
                     val fragment = checkFragmentExistence(tag)
-                    changeFragment( fragment?: DetailsFragment(), tag)
+                    changeFragment( fragment?: SelectionsFragment(), tag)
                     true
                 }
                 R.id.watch_later -> {

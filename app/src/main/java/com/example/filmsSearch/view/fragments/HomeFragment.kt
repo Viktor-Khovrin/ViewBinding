@@ -1,7 +1,6 @@
 package com.example.filmsSearch.view.fragments
 
 import android.os.Bundle
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,12 +9,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.transition.Scene
-import androidx.transition.Slide
-import androidx.transition.TransitionManager
-import androidx.transition.TransitionSet
 import com.example.filmsSearch.databinding.FragmentHomeBinding
 import com.example.filmsSearch.domain.Film
+import com.example.filmsSearch.utils.AnimationHelper
 import com.example.filmsSearch.view.MainActivity
 import com.example.filmsSearch.view.rv_adapters.FilmListRecyclerAdapter
 import com.example.filmsSearch.view.rv_adapters.TopSpacingItemDecoration
@@ -54,15 +50,7 @@ class HomeFragment : Fragment() {
         viewModel.filmsListLiveData.observe(viewLifecycleOwner, Observer<List<Film>> {
             filmsDataBase = it
         })
-        val sceneRoot = Scene(binding.homeFragmentRoot)
-        val searchSlide = Slide(Gravity.TOP).addTarget(binding.searchView)
-        val recyclerSlide = Slide(Gravity.BOTTOM).addTarget(binding.mainRecycler)
-        val customTransition = TransitionSet().apply {
-            duration = 500
-            addTransition(recyclerSlide)
-            addTransition(searchSlide)
-        }
-        TransitionManager.go(sceneRoot, customTransition)
+        AnimationHelper.performFragmentCircularRevealAnimation(binding.homeFragmentRoot, requireActivity(), 1)
         initRecyclerView()
     }
     override fun onCreate(savedInstanceState: Bundle?) {
