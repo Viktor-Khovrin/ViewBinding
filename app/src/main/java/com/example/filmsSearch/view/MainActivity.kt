@@ -1,10 +1,15 @@
-package com.example.filmsSearch
+package com.example.filmsSearch.view
 
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.example.filmsSearch.R
 import com.example.filmsSearch.databinding.ActivityMainBinding
+import com.example.filmsSearch.domain.Film
+import com.example.filmsSearch.view.fragments.DetailsFragment
+import com.example.filmsSearch.view.fragments.FavoritesFragment
+import com.example.filmsSearch.view.fragments.HomeFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -57,7 +62,7 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
                 R.id.watch_later -> {
-                    Toast.makeText(this,R.string.menu_watch_later_title, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, R.string.menu_watch_later_title, Toast.LENGTH_SHORT).show()
                     true
                 }
                 else -> false

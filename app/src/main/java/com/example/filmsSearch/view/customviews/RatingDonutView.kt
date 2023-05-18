@@ -1,9 +1,10 @@
-package com.example.filmsSearch
+package com.example.filmsSearch.view.customviews
 
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
 import android.view.View
+import com.example.filmsSearch.R
 
 class RatingDonutView @JvmOverloads constructor(context: Context, attributeSet: AttributeSet? = null) : View(context, attributeSet) {
     private val oval = RectF()
@@ -19,7 +20,7 @@ class RatingDonutView @JvmOverloads constructor(context: Context, attributeSet: 
 
     init {
         val a =
-                context.theme.obtainStyledAttributes(attributeSet,R.styleable.RatingDonutView,0,0)
+                context.theme.obtainStyledAttributes(attributeSet, R.styleable.RatingDonutView,0,0)
         try {
             stroke = a.getFloat(R.styleable.RatingDonutView_stroke, stroke)
             progress = a.getInt(R.styleable.RatingDonutView_progress, progress)
