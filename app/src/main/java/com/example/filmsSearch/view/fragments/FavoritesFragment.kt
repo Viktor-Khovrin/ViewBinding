@@ -13,14 +13,14 @@ import com.example.filmsSearch.domain.Film
 import com.example.filmsSearch.view.MainActivity
 import com.example.filmsSearch.view.rv_adapters.FilmListRecyclerAdapter
 import com.example.filmsSearch.view.rv_adapters.TopSpacingItemDecoration
-import com.example.filmsSearch.view.viewmodel.HomeFragmentViewModel
+import com.example.filmsSearch.view.viewmodel.FavoritesFragmentViewModel
 
 class FavoritesFragment : Fragment() {
     private lateinit var filmsAdapter: FilmListRecyclerAdapter
     private var bindingFavorites: FragmentFavoritesBinding? = null
 
-    private val viewModel by lazy {
-        ViewModelProvider.NewInstanceFactory().create(HomeFragmentViewModel::class.java)
+    private val viewModelFavorites by lazy {
+        ViewModelProvider.NewInstanceFactory().create(FavoritesFragmentViewModel::class.java)
     }
 
 
@@ -31,7 +31,8 @@ class FavoritesFragment : Fragment() {
             //Если придет такое же значение, то мы выходим из метода
             if (field == value) return
             //Если пришло другое значение, то кладем его в переменную
-            field = value.filter {it.isInFavorites}
+//            field = value.filter {it.isInFavorites}
+            field = value
             //Обновляем RV адаптер
             filmsAdapter.addItems(field)
         }
@@ -45,7 +46,7 @@ class FavoritesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.filmsListLiveData.observe(viewLifecycleOwner, Observer<List<Film>> {
+        viewModelFavorites.filmsListLiveData.observe(viewLifecycleOwner, Observer<List<Film>> {
             filmsDataBase = it
         })
         binding.favoritesRecycler
