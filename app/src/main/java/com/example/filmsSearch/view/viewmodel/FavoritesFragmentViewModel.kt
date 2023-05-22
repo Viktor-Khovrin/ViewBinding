@@ -11,8 +11,6 @@ class FavoritesFragmentViewModel:ViewModel() {
         //Инициализируем интерактор
         private var interactor: Interactor = App.instance.interactor
         init {
-            //TODO init interactor
-
             val films = interactor.getFilmsDB()
             filmsListLiveData.postValue(films.filter {it.isInFavorites})
         }
