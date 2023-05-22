@@ -5,4 +5,4 @@
     android:layout_height="match_parent"
     tools:background="@drawable/background"
     android:id="@+id/home_fragment_root"
-    tools:context=".HomeFragment"/>
+    tools:context=".view.fragments.HomeFragment"/>

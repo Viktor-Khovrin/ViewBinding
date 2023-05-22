@@ -1,4 +1,4 @@
-package com.example.filmsSearch
+package com.example.filmsSearch.view.fragments
 
 import android.content.Intent
 import android.os.Bundle
@@ -6,7 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.example.filmsSearch.R
 import com.example.filmsSearch.databinding.FragmentDetailsBinding
+import com.example.filmsSearch.domain.Film
 
 class DetailsFragment : Fragment() {
     private var bindingDetails: FragmentDetailsBinding?=null
@@ -40,20 +42,17 @@ class DetailsFragment : Fragment() {
             else R.drawable.ic_baseline_favorite_24
         )
 
-        //details_fab_favorites.setOnClickListener{
         binding.detailsFabFavorites.setOnClickListener{
             if (film.isInFavorites){
-                //details_fab_favorites.setImageResource(R.drawable.ic_baseline_favorite_border_24)
                 binding.detailsFabFavorites.setImageResource(R.drawable.ic_baseline_favorite_border_24)
                 film.isInFavorites = false
+
             }else{
-                //details_fab_favorites.setImageResource(R.drawable.ic_baseline_favorite_24)
                 binding.detailsFabFavorites.setImageResource(R.drawable.ic_baseline_favorite_24)
                 film.isInFavorites = true
             }
         }
 
-        //details_fab_share.setOnClickListener{
         binding.detailsFabShare.setOnClickListener{
             val intent = Intent()
             intent.action = Intent.ACTION_SEND
