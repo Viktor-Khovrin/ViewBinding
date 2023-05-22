@@ -16,6 +16,7 @@ class FilmViewHolder(val binding: FilmItemBinding) : RecyclerView.ViewHolder(bin
         title.text = film.title
         Glide.with(itemView)
             .load(film.poster)
+                //ApiConstants.IMAGES_URL + "w342" +
             .centerCrop()
             .into(poster)
         description.text = film.description
