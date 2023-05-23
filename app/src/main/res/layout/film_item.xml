@@ -55,6 +55,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:padding="8dp"
+            android:textSize="@dimen/text_size"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toRightOf="@+id/poster"
             app:layout_constraintRight_toRightOf="parent"
