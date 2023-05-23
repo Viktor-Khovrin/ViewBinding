@@ -2,20 +2,15 @@ package com.example.filmsSearch.view.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.filmsSearch.App
 import com.example.filmsSearch.domain.Film
 import com.example.filmsSearch.domain.Interactor
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
-class HomeFragmentViewModel : ViewModel() {
+
+class HomeFragmentViewModel : ViewModel(), KoinComponent {
     val filmsListLiveData:  MutableLiveData<List<Film>> = MutableLiveData()
-    //Инициализируем интерактор
-    private var interactor: Interactor = App.instance.interactor
-//    init {
-//        //TODO init interactor
-//
-//        val films = interactor.getFilmsDB()
-//        filmsListLiveData.postValue(films)
-//    }
+    private val interactor: Interactor by inject()
     init {
         interactor.getFilmsFromApi(1, object : ApiCallback {
             override fun onSuccess(films: List<Film>) {
