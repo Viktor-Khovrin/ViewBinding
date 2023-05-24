@@ -19,8 +19,7 @@ class FavoritesFragment : Fragment() {
     private lateinit var filmsAdapter: FilmListRecyclerAdapter
     private var bindingFavorites: FragmentFavoritesBinding? = null
     private val binding get() = bindingFavorites!!
-
-    private val viewModelFavorites by lazy {
+    private val viewModel by lazy {
         ViewModelProvider.NewInstanceFactory().create(FavoritesFragmentViewModel::class.java)
     }
 
@@ -45,7 +44,7 @@ class FavoritesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModelFavorites.filmsListLiveDataFavorite.observe(viewLifecycleOwner, Observer<List<Film>> {
+        viewModel.filmsListLiveData.observe(viewLifecycleOwner, Observer<List<Film>> {
             filmsDataBase = it
         })
         binding.favoritesRecycler
