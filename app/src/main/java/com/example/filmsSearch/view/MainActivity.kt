@@ -33,25 +33,20 @@ class MainActivity : AppCompatActivity() {
         val bundle = Bundle()
         bundle.putParcelable("film", film)
         val fragment = DetailsFragment()
+        val tag = "film"
         fragment.arguments = bundle
-        supportFragmentManager
-            .beginTransaction()
-            .replace(R.id.fragment_placeholder, fragment)
-            .addToBackStack(null)
-            .commit()
+        changeFragment(fragment,tag)
     }
 
     private fun initNavigation(){
         mainBinding.bottomNavigation.setOnNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.favorites -> {
-//                    supportFragmentManager
-//                        .beginTransaction()
-//                        .replace(R.id.fragment_placeholder, FavoritesFragment())
-//                        .addToBackStack(null)
-//                        .commit()
                 val tag = "favorites"
                 val fragment = checkFragmentExistence(tag)
+//                    val bundle = Bundle()
+//                    bundle.putParcelable("filmsDataBase", filmsDataBase)
+//                    fragment.arguments = bundle
                 changeFragment( fragment?: FavoritesFragment(), tag)
                     true
                 }

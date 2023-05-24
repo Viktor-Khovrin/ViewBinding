@@ -27,7 +27,7 @@ class HomeFragment : Fragment() {
     }
 
 
-    private var filmsDataBase = listOf<Film>()
+    var filmsDataBase = listOf<Film>()
         //Используем backing field
         set(value) {
             //Если придет такое же значение, то мы выходим из метода

@@ -18,20 +18,20 @@ import com.example.filmsSearch.view.viewmodel.FavoritesFragmentViewModel
 class FavoritesFragment : Fragment() {
     private lateinit var filmsAdapter: FilmListRecyclerAdapter
     private var bindingFavorites: FragmentFavoritesBinding? = null
+    private val binding get() = bindingFavorites!!
 
     private val viewModelFavorites by lazy {
         ViewModelProvider.NewInstanceFactory().create(FavoritesFragmentViewModel::class.java)
     }
 
-
-    private val binding get() = bindingFavorites!!
     private var filmsDataBase = listOf<Film>()
         //Используем backing field
         set(value) {
             //Если придет такое же значение, то мы выходим из метода
             if (field == value) return
             //Если пришло другое значение, то кладем его в переменную
-            field = value.filter {it.isInFavorites}
+            field = value.filter { it.isInFavorites }
+//            field = value.filter {it.isInFavorites}
             //Обновляем RV адаптер
             filmsAdapter.addItems(field)
         }
