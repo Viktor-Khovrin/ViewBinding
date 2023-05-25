@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.example.filmsSearch.R
 import com.example.filmsSearch.databinding.ActivityMainBinding
 import com.example.filmsSearch.domain.Film
@@ -11,11 +12,17 @@ import com.example.filmsSearch.view.fragments.DetailsFragment
 import com.example.filmsSearch.view.fragments.FavoritesFragment
 import com.example.filmsSearch.view.fragments.HomeFragment
 import com.example.filmsSearch.view.fragments.SelectionsFragment
+import com.example.filmsSearch.view.viewmodel.SharedViewModel
 
 class MainActivity : AppCompatActivity() {
 
     private var timePressed = 0L
     private lateinit var mainBinding: ActivityMainBinding
+    private lateinit var viewModel: SharedViewModel
+//    val viewModel by lazy {
+//        ViewModelProvider.NewInstanceFactory().create(SharedViewModel::class.java)
+//    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,6 +30,9 @@ class MainActivity : AppCompatActivity() {
         setContentView(mainBinding.root)
         supportActionBar?.hide()
         initNavigation()
+//        viewModel = ViewModelProvider.NewInstanceFactory().create(SharedViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(SharedViewModel::class.java)
+//        viewModel.init()
         supportFragmentManager
             .beginTransaction()
             .add(R.id.fragment_placeholder, HomeFragment())

@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.filmsSearch.databinding.FragmentFavoritesBinding
@@ -13,15 +12,17 @@ import com.example.filmsSearch.domain.Film
 import com.example.filmsSearch.view.MainActivity
 import com.example.filmsSearch.view.rv_adapters.FilmListRecyclerAdapter
 import com.example.filmsSearch.view.rv_adapters.TopSpacingItemDecoration
-import com.example.filmsSearch.view.viewmodel.FavoritesFragmentViewModel
+import com.example.filmsSearch.view.viewmodel.SharedViewModel
 
 class FavoritesFragment : Fragment() {
     private lateinit var filmsAdapter: FilmListRecyclerAdapter
     private var bindingFavorites: FragmentFavoritesBinding? = null
     private val binding get() = bindingFavorites!!
-    private val viewModel by lazy {
-        ViewModelProvider.NewInstanceFactory().create(FavoritesFragmentViewModel::class.java)
-    }
+    private lateinit var viewModel: SharedViewModel
+
+//    private val viewModel by lazy {
+//        ViewModelProvider.NewInstanceFactory().create(FavoritesFragmentViewModel::class.java)
+//    }
 
     private var filmsDataBase = listOf<Film>()
         //Используем backing field
@@ -44,9 +45,12 @@ class FavoritesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.filmsListLiveData.observe(viewLifecycleOwner, Observer<List<Film>> {
-            filmsDataBase = it
-        })
+        viewModel = ViewModelProvider(requireActivity()).get(SharedViewModel::class.java)
+        viewModel.filmsListLiveData.observe(viewLifecycleOwner,
+            {filmsDataBase = it.filter { it.isInFavorites }})
+//        viewModel.filmsListLiveData.observe(viewLifecycleOwner, Observer<List<Film>> {
+//            filmsDataBase = it
+//        })
         binding.favoritesRecycler
             .apply {
                 filmsAdapter = FilmListRecyclerAdapter(object : FilmListRecyclerAdapter.OnItemClickListener {

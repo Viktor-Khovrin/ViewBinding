@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.filmsSearch.databinding.FragmentHomeBinding
@@ -15,16 +14,18 @@ import com.example.filmsSearch.utils.AnimationHelper
 import com.example.filmsSearch.view.MainActivity
 import com.example.filmsSearch.view.rv_adapters.FilmListRecyclerAdapter
 import com.example.filmsSearch.view.rv_adapters.TopSpacingItemDecoration
-import com.example.filmsSearch.view.viewmodel.HomeFragmentViewModel
+import com.example.filmsSearch.view.viewmodel.SharedViewModel
 import java.util.Locale
 
 class HomeFragment : Fragment() {
     private var bindingHome: FragmentHomeBinding? = null
     private val binding get() = bindingHome!!
     private lateinit var filmsAdapter: FilmListRecyclerAdapter
-    private val viewModel by lazy {
-        ViewModelProvider.NewInstanceFactory().create(HomeFragmentViewModel::class.java)
-    }
+//    private val interactor: Interactor by inject()
+    private lateinit var viewModel: SharedViewModel
+//    private val viewModel by lazy {
+//        ViewModelProvider.NewInstanceFactory().create(HomeFragmentViewModel::class.java)
+//    }
 
 
     var filmsDataBase = listOf<Film>()
@@ -47,9 +48,13 @@ class HomeFragment : Fragment() {
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.filmsListLiveData.observe(viewLifecycleOwner, Observer<List<Film>> {
-            filmsDataBase = it
-        })
+        viewModel = ViewModelProvider(requireActivity()).get(SharedViewModel::class.java)
+        viewModel.init()
+        viewModel.filmsListLiveData.observe(viewLifecycleOwner, {filmsDataBase = it})
+
+//        viewModel.filmsListLiveData.observe(viewLifecycleOwner, Observer<List<Film>> {
+//            filmsDataBase = it
+//        })
         AnimationHelper.performFragmentCircularRevealAnimation(binding.homeFragmentRoot, requireActivity(), 1)
         initRecyclerView()
     }
