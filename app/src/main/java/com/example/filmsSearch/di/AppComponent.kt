@@ -3,7 +3,7 @@ package com.example.filmsSearch.di
 import com.example.filmsSearch.di.modules.DatabaseModule
 import com.example.filmsSearch.di.modules.DomainModule
 import com.example.filmsSearch.di.modules.RemoteModule
-import com.example.filmsSearch.view.viewmodel.HomeFragmentViewModel
+import com.example.filmsSearch.view.viewmodel.SharedViewModel
 import dagger.Component
 import javax.inject.Singleton
 
@@ -17,6 +17,6 @@ import javax.inject.Singleton
     ]
 )
 interface AppComponent {
-    //метод для того, чтобы появилась внедрять зависимости в HomeFragmentViewModel
-    fun inject(homeFragmentViewModel: HomeFragmentViewModel)
+    //метод для того, чтобы появилась возможность внедрять зависимости в HomeFragmentViewModel
+    fun inject(sharedViewModel: SharedViewModel)
 }

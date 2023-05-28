@@ -13,15 +13,13 @@ import com.example.filmsSearch.domain.Film
 import com.example.filmsSearch.view.MainActivity
 import com.example.filmsSearch.view.rv_adapters.FilmListRecyclerAdapter
 import com.example.filmsSearch.view.rv_adapters.TopSpacingItemDecoration
-import com.example.filmsSearch.view.viewmodel.HomeFragmentViewModel
+import com.example.filmsSearch.view.viewmodel.SharedViewModel
 
 class FavoritesFragment : Fragment() {
     private lateinit var filmsAdapter: FilmListRecyclerAdapter
     private var bindingFavorites: FragmentFavoritesBinding? = null
 
-    private val viewModel by lazy {
-        ViewModelProvider.NewInstanceFactory().create(HomeFragmentViewModel::class.java)
-    }
+    private lateinit var viewModel: SharedViewModel
 
 
     private val binding get() = bindingFavorites!!
@@ -45,8 +43,9 @@ class FavoritesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel = ViewModelProvider(requireActivity()).get(SharedViewModel::class.java)
         viewModel.filmsListLiveData.observe(viewLifecycleOwner, Observer<List<Film>> {
-            filmsDataBase = it
+            filmsDataBase = it.filter{it.isInFavorites}
         })
         binding.favoritesRecycler
             .apply {

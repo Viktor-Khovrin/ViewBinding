@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.example.filmsSearch.R
 import com.example.filmsSearch.databinding.ActivityMainBinding
 import com.example.filmsSearch.domain.Film
@@ -11,18 +12,20 @@ import com.example.filmsSearch.view.fragments.DetailsFragment
 import com.example.filmsSearch.view.fragments.FavoritesFragment
 import com.example.filmsSearch.view.fragments.HomeFragment
 import com.example.filmsSearch.view.fragments.SelectionsFragment
+import com.example.filmsSearch.view.viewmodel.SharedViewModel
 
 class MainActivity : AppCompatActivity() {
 
     private var timePressed = 0L
     private lateinit var mainBinding: ActivityMainBinding
-
+    private lateinit var viewModel: SharedViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mainBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(mainBinding.root)
         supportActionBar?.hide()
         initNavigation()
+        viewModel = ViewModelProvider(this).get(SharedViewModel::class.java)
         supportFragmentManager
             .beginTransaction()
             .add(R.id.fragment_placeholder, HomeFragment())
@@ -45,11 +48,6 @@ class MainActivity : AppCompatActivity() {
         mainBinding.bottomNavigation.setOnNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.favorites -> {
-//                    supportFragmentManager
-//                        .beginTransaction()
-//                        .replace(R.id.fragment_placeholder, FavoritesFragment())
-//                        .addToBackStack(null)
-//                        .commit()
                 val tag = "favorites"
                 val fragment = checkFragmentExistence(tag)
                 changeFragment( fragment?: FavoritesFragment(), tag)

@@ -15,16 +15,14 @@ import com.example.filmsSearch.utils.AnimationHelper
 import com.example.filmsSearch.view.MainActivity
 import com.example.filmsSearch.view.rv_adapters.FilmListRecyclerAdapter
 import com.example.filmsSearch.view.rv_adapters.TopSpacingItemDecoration
-import com.example.filmsSearch.view.viewmodel.HomeFragmentViewModel
+import com.example.filmsSearch.view.viewmodel.SharedViewModel
 import java.util.Locale
 
 class HomeFragment : Fragment() {
     private var bindingHome: FragmentHomeBinding? = null
     private val binding get() = bindingHome!!
     private lateinit var filmsAdapter: FilmListRecyclerAdapter
-    private val viewModel by lazy {
-        ViewModelProvider.NewInstanceFactory().create(HomeFragmentViewModel::class.java)
-    }
+    private lateinit var viewModel: SharedViewModel
 
 
     private var filmsDataBase = listOf<Film>()
@@ -47,6 +45,8 @@ class HomeFragment : Fragment() {
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel = ViewModelProvider(requireActivity()).get(SharedViewModel::class.java)
+        viewModel.init()
         viewModel.filmsListLiveData.observe(viewLifecycleOwner, Observer<List<Film>> {
             filmsDataBase = it
         })
