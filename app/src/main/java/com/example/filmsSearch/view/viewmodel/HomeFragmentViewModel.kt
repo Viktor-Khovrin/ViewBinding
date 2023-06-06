@@ -7,14 +7,17 @@ import com.example.filmsSearch.domain.Film
 import com.example.filmsSearch.domain.Interactor
 import javax.inject.Inject
 
-class SharedViewModel: ViewModel() {
+class HomeFragmentViewModel: ViewModel() {
     val filmsListLiveData: MutableLiveData<List<Film>> = MutableLiveData()
-    private var isInitialized = false
+    var isInitialized = false
     //Инициализируем интерактор
     @Inject
     lateinit var interactor: Interactor
     fun init() {
         App.instance.dagger.inject(this)
+        getFilms()
+    }
+    fun getFilms(){
         if (!isInitialized) {
             interactor.getFilmsFromApi(1, object : ApiCallback {
                 override fun onSuccess(films: List<Film>) {
