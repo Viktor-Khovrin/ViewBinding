@@ -9,9 +9,9 @@
     <string name="menu_selections_title">Подборки</string>
     <string name="on_back_pressed">Нажмите дважды для выхода</string>
     <string name="description">Image View</string>
-    <string name="radio_button_popular">Популярные</string>
-    <string name="radio_button_top_rated">Топ 250</string>
-    <string name="radio_button_upcoming">Анонсы</string>
-    <string name="radio_button_playing">В прокате</string>
+    <string name="radio_button_popular">Popular</string>
+    <string name="radio_button_top_rated">Top 250</string>
+    <string name="radio_button_genres">Comedy</string>
+    <string name="radio_button_playing">Filming</string>
     <string name="radio_group_header">Подборка на главном экране:</string>
 </resources>

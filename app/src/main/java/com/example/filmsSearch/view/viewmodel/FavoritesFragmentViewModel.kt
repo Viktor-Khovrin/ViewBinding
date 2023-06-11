@@ -20,11 +20,6 @@ class FavoritesFragmentViewModel : ViewModel() {
 
     private fun getFilmsListLiveData() {
         filmsListLiveData.value = interactor.getFilmsLiveData()
-//        viewModel = ViewModelProvider(requireActivity()).get(HomeFragmentViewModel::class.java)
-//        viewModel.filmsListLiveData.observe(viewLifecycleOwner, Observer<List<Film>> {
-//            filmsDataBase = it.filter{it.isInFavorites}
-//        })
-//        filmsListLiveData.value = interactor.getFilms
     }
 
     interface ApiCallback {

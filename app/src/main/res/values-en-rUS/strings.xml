@@ -11,6 +11,7 @@
     <string name="description">Image View</string>
     <string name="radio_button_popular">Popular</string>
     <string name="radio_button_top_rated">Top 250</string>
-    <string name="radio_button_upcoming">Announced</string>
     <string name="radio_button_playing">Filming</string>
+    <string name="radio_group_header">On main screen:</string>
+    <string name="radio_button_genres">Comedy</string>
 </resources>

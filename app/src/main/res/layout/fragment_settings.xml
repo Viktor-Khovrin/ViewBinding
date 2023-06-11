@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/settings_fragment_root"
-    android:background="@drawable/background_settings"
+    android:background="@drawable/settings"
     tools:context=".view.fragments.SettingsFragment">
 
     <RadioGroup
@@ -43,7 +43,7 @@
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:textColor="@android:color/white"
-            android:text="@string/radio_button_upcoming"/>
+            android:text="@string/radio_button_genres"/>
         <RadioButton
             android:id="@+id/radio_now_playing"
             android:layout_width="match_parent"
