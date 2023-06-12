@@ -13,7 +13,7 @@ class FilmListRecyclerAdapter(private val clickListener: OnItemClickListener):
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 //    inner class ViewHolder(val binding: FilmItemBinding):RecyclerView.ViewHolder(binding.root)
 //    private lateinit var binding: FilmItemBinding
-    private val items = mutableListOf<Film>()
+val items = mutableListOf<Film>()
 
     override fun getItemCount() = items.size
 

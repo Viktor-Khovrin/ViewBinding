@@ -15,24 +15,22 @@ import com.example.filmsSearch.utils.AnimationHelper
 import com.example.filmsSearch.view.MainActivity
 import com.example.filmsSearch.view.rv_adapters.FilmListRecyclerAdapter
 import com.example.filmsSearch.view.rv_adapters.TopSpacingItemDecoration
-import com.example.filmsSearch.view.viewmodel.SharedViewModel
+import com.example.filmsSearch.view.viewmodel.HomeFragmentViewModel
 import java.util.Locale
 
 class HomeFragment : Fragment() {
     private var bindingHome: FragmentHomeBinding? = null
     private val binding get() = bindingHome!!
     private lateinit var filmsAdapter: FilmListRecyclerAdapter
-    private lateinit var viewModel: SharedViewModel
-
+    private lateinit var viewModel: HomeFragmentViewModel
+//    private val viewModel by lazy {
+//        ViewModelProvider.NewInstanceFactory().create(HomeFragmentViewModel::class.java)
+//    }
 
     private var filmsDataBase = listOf<Film>()
-        //Используем backing field
         set(value) {
-            //Если придет такое же значение, то мы выходим из метода
             if (field == value) return
-            //Если пришло другое значение, то кладем его в переменную
             field = value
-            //Обновляем RV адаптер
             filmsAdapter.addItems(field)
         }
 
@@ -45,13 +43,18 @@ class HomeFragment : Fragment() {
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = ViewModelProvider(requireActivity()).get(SharedViewModel::class.java)
+        viewModel = ViewModelProvider(requireActivity())[HomeFragmentViewModel::class.java]
         viewModel.init()
+//        viewModel.filmsListLiveData.observe(viewLifecycleOwner, Observer<List<Film>> {
+//            filmsDataBase = it
+//        })
+        AnimationHelper.performFragmentCircularRevealAnimation(binding.homeFragmentRoot, requireActivity(), 1)
         viewModel.filmsListLiveData.observe(viewLifecycleOwner, Observer<List<Film>> {
             filmsDataBase = it
+            filmsAdapter.addItems(it)
         })
-        AnimationHelper.performFragmentCircularRevealAnimation(binding.homeFragmentRoot, requireActivity(), 1)
         initRecyclerView()
+        initPullToRefresh()
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -98,6 +101,14 @@ class HomeFragment : Fragment() {
         })
     }
 
+    private fun initPullToRefresh() {
+        binding.pullToRefresh.setOnRefreshListener {
+            filmsAdapter.items.clear()
+            viewModel.isInitialized = false
+            viewModel.getFilms()
+            binding.pullToRefresh.isRefreshing = false
+        }
+    }
     override fun onDestroyView() {
         bindingHome = null
         super.onDestroyView()

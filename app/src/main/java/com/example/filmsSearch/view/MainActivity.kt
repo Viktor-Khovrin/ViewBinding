@@ -12,20 +12,21 @@ import com.example.filmsSearch.view.fragments.DetailsFragment
 import com.example.filmsSearch.view.fragments.FavoritesFragment
 import com.example.filmsSearch.view.fragments.HomeFragment
 import com.example.filmsSearch.view.fragments.SelectionsFragment
-import com.example.filmsSearch.view.viewmodel.SharedViewModel
+import com.example.filmsSearch.view.fragments.SettingsFragment
+import com.example.filmsSearch.view.viewmodel.HomeFragmentViewModel
 
 class MainActivity : AppCompatActivity() {
 
     private var timePressed = 0L
     private lateinit var mainBinding: ActivityMainBinding
-    private lateinit var viewModel: SharedViewModel
+    private lateinit var viewModel: HomeFragmentViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mainBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(mainBinding.root)
         supportActionBar?.hide()
         initNavigation()
-        viewModel = ViewModelProvider(this).get(SharedViewModel::class.java)
+        viewModel = ViewModelProvider(this)[HomeFragmentViewModel::class.java]
         supportFragmentManager
             .beginTransaction()
             .add(R.id.fragment_placeholder, HomeFragment())
@@ -62,6 +63,12 @@ class MainActivity : AppCompatActivity() {
                 }
                 R.id.watch_later -> {
                     Toast.makeText(this, R.string.menu_watch_later_title, Toast.LENGTH_SHORT).show()
+                    true
+                }
+                R.id.settings -> {
+                    val tag = "settings"
+                    val fragment = checkFragmentExistence(tag)
+                    changeFragment( fragment?: SettingsFragment(), tag)
                     true
                 }
                 else -> false
