@@ -42,8 +42,12 @@ class Interactor(private val repo: MainRepository,
             .enqueue(object :
                 Callback<TmdbResultsDto> {
                 override fun onResponse(call: Call<TmdbResultsDto>, response: Response<TmdbResultsDto>) {
-                    //При успехе мы вызываем метод передаем onSuccess и в этот коллбэк список фильмов
-                    callback.onSuccess(Converter.convertApiListToDtoList(response.body()?.docs))
+                    val list = Converter.convertApiListToDtoList(response.body()?.docs)
+                    list.forEach{
+                        repo.putToDb(film = it)
+                    }
+                    callback.onSuccess(list)
+//                    callback.onSuccess(Converter.convertApiListToDtoList(response.body()?.docs))
                 }
 
                 override fun onFailure(call: Call<TmdbResultsDto>, t: Throwable) {
@@ -54,10 +58,8 @@ class Interactor(private val repo: MainRepository,
         )
     }
 
-    fun getFilmsLiveData(): List<Film>{
-        //TODO
-        return TODO("Provide the return value")
-    }
+    fun getFilmsFromDB(): List<Film> = repo.getAllFromDB()
+
     //Save preferences
     fun saveDefaultCategoryToPreferences(category: String) {
         preferences.saveDefaultCategory(category)

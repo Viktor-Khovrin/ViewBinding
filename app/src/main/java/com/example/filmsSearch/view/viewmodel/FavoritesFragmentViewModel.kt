@@ -15,11 +15,11 @@ class FavoritesFragmentViewModel : ViewModel() {
 
     fun init() {
         App.instance.dagger.inject(this)
-        getFilmsListLiveData()
+        getFilmsFromDB()
     }
 
-    private fun getFilmsListLiveData() {
-        filmsListLiveData.value = interactor.getFilmsLiveData()
+    private fun getFilmsFromDB() {
+        filmsListLiveData.value = interactor.getFilmsFromDB().filter{it.isInFavorites}
     }
 
     interface ApiCallback {
