@@ -19,80 +19,39 @@ class Interactor(private val repo: MainRepository,
     val context = App.instance
 
     fun getFilmsFromApi(page: Int, callback: HomeFragmentViewModel.ApiCallback) {
+        var top250 : String? = null
+        var ticketsOnSale: String? = null
+        var genres: String? = null
         when (getDefaultCategoryFromPreferences()){
-            context.getString(R.string.radio_button_popular) ->
-                retrofitService.getFilms(ApiKey.API,
-                                         page,
-                                         null,
-                                         null,
-                                         null)
-                    .enqueue(object :
-                    Callback<TmdbResultsDto> {
-                        override fun onResponse(call: Call<TmdbResultsDto>, response: Response<TmdbResultsDto>) {
-                            //При успехе мы вызываем метод передаем onSuccess и в этот коллбэк список фильмов
-                            callback.onSuccess(Converter.convertApiListToDtoList(response.body()?.docs))
-                        }
-
-                        override fun onFailure(call: Call<TmdbResultsDto>, t: Throwable) {
-                            //В случае провала вызываем другой метод коллбека
-                            callback.onFailure()
-                        }
-                })
-            context.getString(R.string.radio_button_top_rated) ->
-                retrofitService.getFilms(ApiKey.API,
-                                         page,
-                                         "!null",
-                                         null,
-                                         null)
-                    .enqueue(object :
-                    Callback<TmdbResultsDto> {
-                    override fun onResponse(call: Call<TmdbResultsDto>, response: Response<TmdbResultsDto>) {
-                        //При успехе мы вызываем метод передаем onSuccess и в этот коллбэк список фильмов
-                        callback.onSuccess(Converter.convertApiListToDtoList(response.body()?.docs))
-                    }
-
-                    override fun onFailure(call: Call<TmdbResultsDto>, t: Throwable) {
-                        //В случае провала вызываем другой метод коллбека
-                        callback.onFailure()
-                    }
-                })
-            context.getString(R.string.radio_button_playing) ->
-                retrofitService.getFilms(ApiKey.API,
-                                        page,
-                                        null,
-                                        "true",
-                                        null)
-                    .enqueue(object :
-                        Callback<TmdbResultsDto> {
-                        override fun onResponse(call: Call<TmdbResultsDto>, response: Response<TmdbResultsDto>) {
-                            //При успехе мы вызываем метод передаем onSuccess и в этот коллбэк список фильмов
-                            callback.onSuccess(Converter.convertApiListToDtoList(response.body()?.docs))
-                        }
-
-                        override fun onFailure(call: Call<TmdbResultsDto>, t: Throwable) {
-                            //В случае провала вызываем другой метод коллбека
-                            callback.onFailure()
-                        }
-                })
-            context.getString(R.string.radio_button_genres) ->
-                retrofitService.getFilms(ApiKey.API,
-                                        page,
-                                        null,
-                                        null,
-                                        "комедия")
-                    .enqueue(object :
-                        Callback<TmdbResultsDto> {
-                        override fun onResponse(call: Call<TmdbResultsDto>, response: Response<TmdbResultsDto>) {
-                            //При успехе мы вызываем метод передаем onSuccess и в этот коллбэк список фильмов
-                            callback.onSuccess(Converter.convertApiListToDtoList(response.body()?.docs))
-                        }
-
-                        override fun onFailure(call: Call<TmdbResultsDto>, t: Throwable) {
-                            //В случае провала вызываем другой метод коллбека
-                            callback.onFailure()
-                        }
-                })
+            context.getString(R.string.radio_button_popular) -> { }
+            context.getString(R.string.radio_button_top_rated) -> {
+                top250 = "!null"
+            }
+            context.getString(R.string.radio_button_playing) ->{
+                ticketsOnSale = "true"
+            }
+            context.getString(R.string.radio_button_genres) ->{
+                genres = "комедия"
+            }
         }
+        retrofitService.getFilms(ApiKey.API,
+                                page,
+                                top250,
+                                ticketsOnSale,
+                                genres)
+            .enqueue(object :
+                Callback<TmdbResultsDto> {
+                override fun onResponse(call: Call<TmdbResultsDto>, response: Response<TmdbResultsDto>) {
+                    //При успехе мы вызываем метод передаем onSuccess и в этот коллбэк список фильмов
+                    callback.onSuccess(Converter.convertApiListToDtoList(response.body()?.docs))
+                }
+
+                override fun onFailure(call: Call<TmdbResultsDto>, t: Throwable) {
+                    //В случае провала вызываем другой метод коллбека
+                    callback.onFailure()
+                }
+            }
+        )
     }
 
     fun getFilmsLiveData(): List<Film>{
