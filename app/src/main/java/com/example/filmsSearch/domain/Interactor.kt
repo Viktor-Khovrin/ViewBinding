@@ -2,6 +2,7 @@ package com.example.filmsSearch.domain
 
 import com.example.filmsSearch.App
 import com.example.filmsSearch.R
+import com.example.filmsSearch.data.Entity.Film
 import com.example.filmsSearch.data.Entity.TmdbResultsDto
 import com.example.filmsSearch.data.MainRepository
 import com.example.filmsSearch.data.TmdbApi
@@ -43,9 +44,10 @@ class Interactor(private val repo: MainRepository,
                 Callback<TmdbResultsDto> {
                 override fun onResponse(call: Call<TmdbResultsDto>, response: Response<TmdbResultsDto>) {
                     val list = Converter.convertApiListToDtoList(response.body()?.docs)
-                    list.forEach{
-                        repo.putToDb(film = it)
-                    }
+                    repo.putToDb(list)
+//                    list.forEach{
+//                        repo.putToDb(film = it)
+//                    }
                     callback.onSuccess(list)
 //                    callback.onSuccess(Converter.convertApiListToDtoList(response.body()?.docs))
                 }
@@ -60,10 +62,23 @@ class Interactor(private val repo: MainRepository,
 
     fun getFilmsFromDB(): List<Film> = repo.getAllFromDB()
 
+    fun getOneFilmFromDB(id: Int):Film = repo.getById(id)
+
+    fun updateFilmInDb(film:Film) {
+        repo.updateInDb(film)
+    }
+
     //Save preferences
     fun saveDefaultCategoryToPreferences(category: String) {
         preferences.saveDefaultCategory(category)
+        setWrongCurrentQueryTime()
     }
     //Get preferences
     fun getDefaultCategoryFromPreferences() = preferences.getDefaultCategory()
+
+    fun setCurrentQueryTime() = preferences.setQueryTime()
+
+    fun setWrongCurrentQueryTime() = preferences.setWrongQueryTime()
+
+    fun getCurrentQueryTime() = preferences.getQueryTime()
 }
