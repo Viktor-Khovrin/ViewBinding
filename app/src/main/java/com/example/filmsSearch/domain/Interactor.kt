@@ -44,12 +44,9 @@ class Interactor(private val repo: MainRepository,
                 Callback<TmdbResultsDto> {
                 override fun onResponse(call: Call<TmdbResultsDto>, response: Response<TmdbResultsDto>) {
                     val list = Converter.convertApiListToDtoList(response.body()?.docs)
+                    repo.clearDB()
                     repo.putToDb(list)
-//                    list.forEach{
-//                        repo.putToDb(film = it)
-//                    }
                     callback.onSuccess(list)
-//                    callback.onSuccess(Converter.convertApiListToDtoList(response.body()?.docs))
                 }
 
                 override fun onFailure(call: Call<TmdbResultsDto>, t: Throwable) {
@@ -71,7 +68,6 @@ class Interactor(private val repo: MainRepository,
     //Save preferences
     fun saveDefaultCategoryToPreferences(category: String) {
         preferences.saveDefaultCategory(category)
-        setWrongCurrentQueryTime()
     }
     //Get preferences
     fun getDefaultCategoryFromPreferences() = preferences.getDefaultCategory()

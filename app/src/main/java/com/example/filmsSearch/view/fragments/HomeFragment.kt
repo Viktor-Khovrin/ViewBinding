@@ -104,7 +104,7 @@ class HomeFragment : Fragment() {
     private fun initPullToRefresh() {
         binding.pullToRefresh.setOnRefreshListener {
             filmsAdapter.items.clear()
-            viewModel.isInitialized = false
+            viewModel.interactor.setWrongCurrentQueryTime()
             viewModel.getFilms()
             binding.pullToRefresh.isRefreshing = false
         }

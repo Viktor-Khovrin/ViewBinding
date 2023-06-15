@@ -45,6 +45,12 @@ class MainRepository(private val filmDao: FilmDao) {
         }
     }
 
+    fun clearDB() {
+        Executors.newSingleThreadExecutor().execute {
+            filmDao.clearCachedFilms()
+        }
+    }
+
     fun updateInDb(film: Film) {
         Executors.newSingleThreadExecutor().execute {
             filmDao.updateFilmInDb(film)

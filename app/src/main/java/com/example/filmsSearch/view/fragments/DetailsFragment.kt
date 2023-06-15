@@ -37,17 +37,17 @@ class DetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 //        viewModel = ViewModelProvider(requireActivity()).get(DetailsFragmentViewModel::class.java)
+
         film = arguments?.get(FILM_FIELD_NAME) as Film
         viewModel.init()
         viewModel.filmLiveData.value = film
-        viewModel.filmLiveData.observe(viewLifecycleOwner, Observer<Film> {film = it })
+        viewModel.filmLiveData.observe(viewLifecycleOwner, Observer<Film> {film = it})
 //        viewModel.filmLiveData.value = film
         setDetailedContent()
     }
 
     private fun setDetailedContent() {
 //        val film = arguments?.get(FILM_FIELD_NAME) as Film
-        //details_toolbar.title = film.title
         binding.detailsToolbar.title = film.title
 //        //details_poster.setImageResource(film.poster)
 //        binding.detailsPoster.setImageResource(film.poster)
@@ -74,8 +74,8 @@ class DetailsFragment : Fragment() {
                 binding.detailsFabFavorites.setImageResource(R.drawable.ic_baseline_favorite_24)
                 film.isInFavorites = true
             }
+            viewModel.filmLiveData.postValue(film)
             EventBus.getDefault().post(MessageEvent(film.id))
-//            viewModel.putOneFilmToDB(film)
         }
 
         binding.detailsFabShare.setOnClickListener{

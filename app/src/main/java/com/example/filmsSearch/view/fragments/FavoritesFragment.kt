@@ -62,9 +62,6 @@ class FavoritesFragment : Fragment() {
                 val decorator = TopSpacingItemDecoration(8)
                 addItemDecoration(decorator)
             }
-//        val result = filmsDataBase.filter {it.isInFavorites}
-
-//        filmsAdapter.addItems(result)
         filmsAdapter.addItems(filmsDataBase)
     }
 

@@ -20,6 +20,10 @@ interface FilmDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(list: List<Film>)
 
+    //Clear DB
+    @Query("DELETE FROM cached_films")
+    fun clearCachedFilms()
+
     @Query("SELECT * FROM cached_films WHERE id =:id")
     fun getOneCashedFilm(id: Int): Film
 }

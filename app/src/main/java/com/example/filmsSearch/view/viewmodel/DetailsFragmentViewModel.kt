@@ -29,7 +29,6 @@ class DetailsFragmentViewModel: ViewModel() {
 
     @Subscribe
     fun onMessageEvent(event: MessageEvent) {
-//        Toast.makeText(interactor.context, event.message, Toast.LENGTH_SHORT).show()
         putOneFilmToDB(filmLiveData.value as Film)
     }
 

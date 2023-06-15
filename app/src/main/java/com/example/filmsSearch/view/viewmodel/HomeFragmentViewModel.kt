@@ -21,20 +21,19 @@ class HomeFragmentViewModel: ViewModel() {
     }
     fun getFilms(){
         if (interactor.getCurrentQueryTime()+diffTimeout <= System.currentTimeMillis()) {
-            interactor.getFilmsFromApi(1, object : ApiCallback {
-                override fun onSuccess(films: List<Film>) {
-                    filmsListLiveData.postValue(films)
-                    interactor.setCurrentQueryTime()
-                }
-
-                override fun onFailure() {
-                    Executors.newSingleThreadExecutor().execute {
-                        filmsListLiveData.postValue(interactor.getFilmsFromDB())
+                interactor.getFilmsFromApi(1, object : ApiCallback {
+                    override fun onSuccess(films: List<Film>) {
+                        filmsListLiveData.postValue(films)
+                        interactor.setCurrentQueryTime()
                     }
-                }
-            })
 
-            }
+                    override fun onFailure() {
+                        Executors.newSingleThreadExecutor().execute {
+                            filmsListLiveData.postValue(interactor.getFilmsFromDB())
+                        }
+                    }
+                })
+        }
         else {
             Executors.newSingleThreadExecutor().execute {
                 filmsListLiveData.postValue(interactor.getFilmsFromDB())
