@@ -20,18 +20,31 @@ class PreferenceProvider(context: Context) {
     }
 
     //Category prefs
-    //Сохраняем категорию
+    //Save category
     fun saveDefaultCategory(category: String) {
         preference.edit { putString(KEY_DEFAULT_CATEGORY, category) }
     }
-    //Забираем категорию
+    //Get category
     fun getDefaultCategory(): String {
         return preference.getString(KEY_DEFAULT_CATEGORY, DEFAULT_CATEGORY) ?: DEFAULT_CATEGORY
     }
-    //Ключи для наших настроек, по ним мы их будем получать
+    //Set query time
+    fun setQueryTime(){
+        preference.edit { putLong(KEY_API_QUERY_TIME, System.currentTimeMillis())}
+    }
+    //Set wrong query time for renew list
+    fun setWrongQueryTime(){
+        preference.edit { putLong(KEY_API_QUERY_TIME, System.currentTimeMillis()-10*60*1000) }
+    }
+    //Get query time
+    fun getQueryTime(): Long {
+        return preference.getLong(KEY_API_QUERY_TIME,0)
+    }
+    //Keys for prefs
     companion object {
         private const val KEY_FIRST_LAUNCH = "first_launch"
         private const val KEY_DEFAULT_CATEGORY = "default_category"
         private const val DEFAULT_CATEGORY = "popular"
+        private const val KEY_API_QUERY_TIME = "query_time"
     }
 }

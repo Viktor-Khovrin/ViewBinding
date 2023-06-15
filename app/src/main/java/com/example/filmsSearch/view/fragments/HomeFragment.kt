@@ -9,8 +9,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.filmsSearch.data.Entity.Film
 import com.example.filmsSearch.databinding.FragmentHomeBinding
-import com.example.filmsSearch.domain.Film
 import com.example.filmsSearch.utils.AnimationHelper
 import com.example.filmsSearch.view.MainActivity
 import com.example.filmsSearch.view.rv_adapters.FilmListRecyclerAdapter
@@ -22,10 +22,10 @@ class HomeFragment : Fragment() {
     private var bindingHome: FragmentHomeBinding? = null
     private val binding get() = bindingHome!!
     private lateinit var filmsAdapter: FilmListRecyclerAdapter
-    private lateinit var viewModel: HomeFragmentViewModel
-//    private val viewModel by lazy {
-//        ViewModelProvider.NewInstanceFactory().create(HomeFragmentViewModel::class.java)
-//    }
+//    private lateinit var viewModel: HomeFragmentViewModel
+    private val viewModel by lazy {
+        ViewModelProvider.NewInstanceFactory().create(HomeFragmentViewModel::class.java)
+    }
 
     private var filmsDataBase = listOf<Film>()
         set(value) {
@@ -43,7 +43,7 @@ class HomeFragment : Fragment() {
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = ViewModelProvider(requireActivity())[HomeFragmentViewModel::class.java]
+//        viewModel = ViewModelProvider(requireActivity())[HomeFragmentViewModel::class.java]
         viewModel.init()
 //        viewModel.filmsListLiveData.observe(viewLifecycleOwner, Observer<List<Film>> {
 //            filmsDataBase = it

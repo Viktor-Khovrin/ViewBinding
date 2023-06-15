@@ -6,8 +6,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.filmsSearch.R
+import com.example.filmsSearch.data.Entity.Film
 import com.example.filmsSearch.databinding.ActivityMainBinding
-import com.example.filmsSearch.domain.Film
 import com.example.filmsSearch.view.fragments.DetailsFragment
 import com.example.filmsSearch.view.fragments.FavoritesFragment
 import com.example.filmsSearch.view.fragments.HomeFragment

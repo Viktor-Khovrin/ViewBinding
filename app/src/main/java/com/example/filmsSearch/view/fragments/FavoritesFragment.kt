@@ -8,19 +8,21 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.filmsSearch.data.Entity.Film
 import com.example.filmsSearch.databinding.FragmentFavoritesBinding
-import com.example.filmsSearch.domain.Film
 import com.example.filmsSearch.view.MainActivity
 import com.example.filmsSearch.view.rv_adapters.FilmListRecyclerAdapter
 import com.example.filmsSearch.view.rv_adapters.TopSpacingItemDecoration
-import com.example.filmsSearch.view.viewmodel.HomeFragmentViewModel
+import com.example.filmsSearch.view.viewmodel.FavoritesFragmentViewModel
 
 class FavoritesFragment : Fragment() {
     private lateinit var filmsAdapter: FilmListRecyclerAdapter
     private var bindingFavorites: FragmentFavoritesBinding? = null
 
-    private lateinit var viewModel: HomeFragmentViewModel
-
+//    private lateinit var viewModel: FavoritesFragmentViewModel
+    private val viewModel by lazy {
+        ViewModelProvider.NewInstanceFactory().create(FavoritesFragmentViewModel::class.java)
+    }
 
     private val binding get() = bindingFavorites!!
     private var filmsDataBase = listOf<Film>()
@@ -43,7 +45,8 @@ class FavoritesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = ViewModelProvider(requireActivity()).get(HomeFragmentViewModel::class.java)
+//        viewModel = ViewModelProvider(requireActivity()).get(FavoritesFragmentViewModel::class.java)
+        viewModel.init()
         viewModel.filmsListLiveData.observe(viewLifecycleOwner, Observer<List<Film>> {
             filmsDataBase = it.filter{it.isInFavorites}
         })

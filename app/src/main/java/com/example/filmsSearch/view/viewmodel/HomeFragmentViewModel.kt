@@ -3,13 +3,15 @@ package com.example.filmsSearch.view.viewmodel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.filmsSearch.App
-import com.example.filmsSearch.domain.Film
+import com.example.filmsSearch.data.Entity.Film
 import com.example.filmsSearch.domain.Interactor
+import java.util.concurrent.Executors
 import javax.inject.Inject
 
 class HomeFragmentViewModel: ViewModel() {
     val filmsListLiveData: MutableLiveData<List<Film>> = MutableLiveData()
     var isInitialized = false
+    private val diffTimeout = 10*60*1000
     //Инициализируем интерактор
     @Inject
     lateinit var interactor: Interactor
@@ -18,17 +20,25 @@ class HomeFragmentViewModel: ViewModel() {
         getFilms()
     }
     fun getFilms(){
-        if (!isInitialized) {
+        if (interactor.getCurrentQueryTime()+diffTimeout <= System.currentTimeMillis()) {
             interactor.getFilmsFromApi(1, object : ApiCallback {
                 override fun onSuccess(films: List<Film>) {
                     filmsListLiveData.postValue(films)
-                    isInitialized = true
+                    interactor.setCurrentQueryTime()
                 }
 
                 override fun onFailure() {
-                    filmsListLiveData.postValue(interactor.getFilmsFromDB())
+                    Executors.newSingleThreadExecutor().execute {
+                        filmsListLiveData.postValue(interactor.getFilmsFromDB())
+                    }
                 }
             })
+
+            }
+        else {
+            Executors.newSingleThreadExecutor().execute {
+                filmsListLiveData.postValue(interactor.getFilmsFromDB())
+            }
         }
     }
 
