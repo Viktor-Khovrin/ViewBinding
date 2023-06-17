@@ -22,7 +22,6 @@ class HomeFragment : Fragment() {
     private var bindingHome: FragmentHomeBinding? = null
     private val binding get() = bindingHome!!
     private lateinit var filmsAdapter: FilmListRecyclerAdapter
-//    private lateinit var viewModel: HomeFragmentViewModel
     private val viewModel by lazy {
         ViewModelProvider.NewInstanceFactory().create(HomeFragmentViewModel::class.java)
     }
