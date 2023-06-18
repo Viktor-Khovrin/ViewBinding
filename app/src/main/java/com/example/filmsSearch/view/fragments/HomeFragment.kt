@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -47,6 +48,9 @@ class HomeFragment : Fragment() {
 //        viewModel.filmsListLiveData.observe(viewLifecycleOwner, Observer<List<Film>> {
 //            filmsDataBase = it
 //        })
+        viewModel.progressEventLiveData.observe(viewLifecycleOwner, Observer<Boolean>{
+            binding.progressBar.isVisible = it
+        })
         AnimationHelper.performFragmentCircularRevealAnimation(binding.homeFragmentRoot, requireActivity(), 1)
         viewModel.filmsListLiveData.observe(viewLifecycleOwner, Observer<List<Film>> {
             filmsDataBase = it

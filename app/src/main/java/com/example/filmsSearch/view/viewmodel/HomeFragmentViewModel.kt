@@ -10,6 +10,7 @@ import javax.inject.Inject
 
 class HomeFragmentViewModel: ViewModel() {
     val filmsListLiveData: MutableLiveData<List<Film>> = MutableLiveData()
+    var progressEventLiveData: MutableLiveData<Boolean> = MutableLiveData()
     var isInitialized = false
     private val diffTimeout = 10*60*1000
     //Инициализируем интерактор
@@ -21,6 +22,7 @@ class HomeFragmentViewModel: ViewModel() {
     }
     fun getFilms(){
         if (interactor.getCurrentQueryTime()+diffTimeout <= System.currentTimeMillis()) {
+            progressEventLiveData.value = true
                 interactor.getFilmsFromApi(1, object : ApiCallback {
                     override fun onSuccess(films: List<Film>) {
                         filmsListLiveData.postValue(films)
@@ -33,6 +35,7 @@ class HomeFragmentViewModel: ViewModel() {
                         }
                     }
                 })
+            progressEventLiveData.value = false
         }
         else {
             Executors.newSingleThreadExecutor().execute {

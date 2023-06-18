@@ -23,7 +23,6 @@ class DetailsFragmentViewModel: ViewModel() {
             EventBus.getDefault().register(this)
         }
         filmLiveData.observeForever(observer)
-//        getOneFilmFromDB(filmLiveData.value!!.id)
     }
 
     private fun getOneFilmFromDB(filmId: Int){
