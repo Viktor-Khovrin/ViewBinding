@@ -8,31 +8,29 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.filmsSearch.data.Entity.Film
 import com.example.filmsSearch.databinding.FragmentFavoritesBinding
-import com.example.filmsSearch.domain.Film
 import com.example.filmsSearch.view.MainActivity
 import com.example.filmsSearch.view.rv_adapters.FilmListRecyclerAdapter
 import com.example.filmsSearch.view.rv_adapters.TopSpacingItemDecoration
-import com.example.filmsSearch.view.viewmodel.HomeFragmentViewModel
+import com.example.filmsSearch.view.viewmodel.FavoritesFragmentViewModel
 
 class FavoritesFragment : Fragment() {
     private lateinit var filmsAdapter: FilmListRecyclerAdapter
     private var bindingFavorites: FragmentFavoritesBinding? = null
 
-    private lateinit var viewModel: HomeFragmentViewModel
-
+    private val viewModel by lazy {
+        ViewModelProvider.NewInstanceFactory().create(FavoritesFragmentViewModel::class.java)
+    }
 
     private val binding get() = bindingFavorites!!
     private var filmsDataBase = listOf<Film>()
-        //Используем backing field
         set(value) {
-            //Если придет такое же значение, то мы выходим из метода
             if (field == value) return
-            //Если пришло другое значение, то кладем его в переменную
-            field = value.filter {it.isInFavorites}
-            //Обновляем RV адаптер
+            field = value
             filmsAdapter.addItems(field)
         }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -43,9 +41,10 @@ class FavoritesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = ViewModelProvider(requireActivity()).get(HomeFragmentViewModel::class.java)
+        viewModel.init()
         viewModel.filmsListLiveData.observe(viewLifecycleOwner, Observer<List<Film>> {
             filmsDataBase = it.filter{it.isInFavorites}
+            filmsAdapter.addItems(it.filter{it.isInFavorites})
         })
         binding.favoritesRecycler
             .apply {
@@ -59,10 +58,6 @@ class FavoritesFragment : Fragment() {
                 val decorator = TopSpacingItemDecoration(8)
                 addItemDecoration(decorator)
             }
-//        val result = filmsDataBase.filter {it.isInFavorites}
-
-//        filmsAdapter.addItems(result)
-        filmsAdapter.addItems(filmsDataBase)
     }
 
     override fun onDestroyView() {

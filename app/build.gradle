@@ -47,6 +47,7 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'com.google.android.gms:play-services-wearable:17.1.0'
 
     //Tests
     testImplementation 'junit:junit:4.13.2'
@@ -76,5 +77,9 @@ dependencies {
     //Dagger
     implementation 'com.google.dagger:dagger:2.46.1'
     kapt 'com.google.dagger:dagger-compiler:2.46.1'
-
+    //ROOM
+    implementation "androidx.room:room-runtime:2.5.1"
+    kapt "androidx.room:room-compiler:2.5.1"
+    //EventBus
+    implementation 'org.greenrobot:eventbus:3.2.0'
 }

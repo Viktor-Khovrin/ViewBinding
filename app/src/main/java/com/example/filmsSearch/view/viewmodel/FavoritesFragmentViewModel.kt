@@ -1,29 +1,28 @@
 package com.example.filmsSearch.view.viewmodel
 
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.example.filmsSearch.App
-import com.example.filmsSearch.domain.Film
+import com.example.filmsSearch.data.Entity.Film
 import com.example.filmsSearch.domain.Interactor
 import javax.inject.Inject
 
 class FavoritesFragmentViewModel : ViewModel() {
+
     @Inject
     lateinit var interactor: Interactor
-    val filmsListLiveData: MutableLiveData<List<Film>> = MutableLiveData()
-    private lateinit var viewModel: HomeFragmentViewModel
-
+    lateinit var filmsListLiveData: LiveData<List<Film>>
     fun init() {
         App.instance.dagger.inject(this)
-        getFilmsListLiveData()
+        getFilmsFromDB()
     }
 
-    private fun getFilmsListLiveData() {
-        filmsListLiveData.value = interactor.getFilmsLiveData()
-    }
+    private fun getFilmsFromDB() {
+            filmsListLiveData = interactor.getFilmsFromDB()
+        }
 
     interface ApiCallback {
-        fun onSuccess(films: List<Film>)
+        fun onSuccess()
         fun onFailure()
     }
 

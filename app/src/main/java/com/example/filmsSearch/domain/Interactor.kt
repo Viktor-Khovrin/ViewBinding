@@ -1,7 +1,9 @@
 package com.example.filmsSearch.domain
 
+import androidx.lifecycle.LiveData
 import com.example.filmsSearch.App
 import com.example.filmsSearch.R
+import com.example.filmsSearch.data.Entity.Film
 import com.example.filmsSearch.data.Entity.TmdbResultsDto
 import com.example.filmsSearch.data.MainRepository
 import com.example.filmsSearch.data.TmdbApi
@@ -42,8 +44,10 @@ class Interactor(private val repo: MainRepository,
             .enqueue(object :
                 Callback<TmdbResultsDto> {
                 override fun onResponse(call: Call<TmdbResultsDto>, response: Response<TmdbResultsDto>) {
-                    //При успехе мы вызываем метод передаем onSuccess и в этот коллбэк список фильмов
-                    callback.onSuccess(Converter.convertApiListToDtoList(response.body()?.docs))
+                    val list = Converter.convertApiListToDtoList(response.body()?.docs)
+                    repo.clearDB()
+                    repo.putToDb(list)
+                    callback.onSuccess()
                 }
 
                 override fun onFailure(call: Call<TmdbResultsDto>, t: Throwable) {
@@ -54,14 +58,24 @@ class Interactor(private val repo: MainRepository,
         )
     }
 
-    fun getFilmsLiveData(): List<Film>{
-        //TODO
-        return TODO("Provide the return value")
+    fun getFilmsFromDB(): LiveData<List<Film>> = repo.getAllFromDB()
+
+    fun getOneFilmFromDB(id: Int):Film = repo.getById(id)
+
+    fun updateFilmInDb(film:Film) {
+        repo.updateInDb(film)
     }
+
     //Save preferences
     fun saveDefaultCategoryToPreferences(category: String) {
         preferences.saveDefaultCategory(category)
     }
     //Get preferences
     fun getDefaultCategoryFromPreferences() = preferences.getDefaultCategory()
+
+    fun setCurrentQueryTime() = preferences.setQueryTime()
+
+    fun setWrongCurrentQueryTime() = preferences.setWrongQueryTime()
+
+    fun getCurrentQueryTime() = preferences.getQueryTime()
 }
