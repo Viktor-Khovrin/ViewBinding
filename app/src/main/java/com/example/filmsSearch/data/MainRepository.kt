@@ -1,5 +1,6 @@
 package com.example.filmsSearch.data
 
+import androidx.lifecycle.LiveData
 import com.example.filmsSearch.data.DAO.FilmDao
 import com.example.filmsSearch.data.Entity.Film
 import java.util.concurrent.Executors
@@ -57,9 +58,7 @@ class MainRepository(private val filmDao: FilmDao) {
         }
     }
 
-    fun getAllFromDB(): List<Film> {
-        return filmDao.getCachedFilms()
-    }
+    fun getAllFromDB(): LiveData<List<Film>> = filmDao.getCachedFilms()
 
     fun getById(id: Int): Film{
         return filmDao.getOneCashedFilm(id)

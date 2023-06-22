@@ -1,5 +1,6 @@
 package com.example.filmsSearch.data.DAO
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -11,7 +12,7 @@ import com.example.filmsSearch.data.Entity.Film
 interface FilmDao {
     //Query for all from table
     @Query("SELECT * FROM cached_films")
-    fun getCachedFilms(): List<Film>
+    fun getCachedFilms(): LiveData<List<Film>>
 
     @Update
     fun updateFilmInDb(film: Film)

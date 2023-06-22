@@ -1,5 +1,6 @@
 package com.example.filmsSearch.domain
 
+import androidx.lifecycle.LiveData
 import com.example.filmsSearch.App
 import com.example.filmsSearch.R
 import com.example.filmsSearch.data.Entity.Film
@@ -46,7 +47,7 @@ class Interactor(private val repo: MainRepository,
                     val list = Converter.convertApiListToDtoList(response.body()?.docs)
                     repo.clearDB()
                     repo.putToDb(list)
-                    callback.onSuccess(list)
+                    callback.onSuccess()
                 }
 
                 override fun onFailure(call: Call<TmdbResultsDto>, t: Throwable) {
@@ -57,7 +58,7 @@ class Interactor(private val repo: MainRepository,
         )
     }
 
-    fun getFilmsFromDB(): List<Film> = repo.getAllFromDB()
+    fun getFilmsFromDB(): LiveData<List<Film>> = repo.getAllFromDB()
 
     fun getOneFilmFromDB(id: Int):Film = repo.getById(id)
 
