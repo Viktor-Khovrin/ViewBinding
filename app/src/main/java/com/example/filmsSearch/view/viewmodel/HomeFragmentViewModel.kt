@@ -1,44 +1,31 @@
 package com.example.filmsSearch.view.viewmodel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.filmsSearch.App
 import com.example.filmsSearch.data.Entity.Film
 import com.example.filmsSearch.domain.Interactor
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class HomeFragmentViewModel: ViewModel() {
-    val showProgressBar: MutableLiveData<Boolean> = MutableLiveData()
-    lateinit var filmsListLiveData: LiveData<List<Film>>
+    val showProgressBar: Channel<Boolean>
+    val filmsListFlow: Flow<List<Film>>
     private val diffTimeout = 10*60*1000
-    //Инициализируем интерактор
+    //Initializing interactor
     @Inject
     lateinit var interactor: Interactor
-    fun init() {
+    init {
+//        Thread.dumpStack()
         App.instance.dagger.inject(this)
-        filmsListLiveData = interactor.getFilmsFromDB()
+        showProgressBar = interactor.progressBarStatus
+        filmsListFlow = interactor.getFilmsFromDB()
         getFilms()
     }
     fun getFilms(){
         if (interactor.getCurrentQueryTime()+diffTimeout <= System.currentTimeMillis()) {
-            showProgressBar.postValue(true)
-                interactor.getFilmsFromApi(1, object : ApiCallback {
-                    override fun onSuccess() {
-                        showProgressBar.postValue(false)
-                        interactor.setCurrentQueryTime()
-                    }
-
-                    override fun onFailure() {
-                        showProgressBar.postValue(false)
-                    }
-                })
+            interactor.getFilmsFromApi(1)
         }
-//        else {
-//            Executors.newSingleThreadExecutor().execute {
-//                filmsListLiveData.postValue(interactor.getFilmsFromDB())
-//            }
-//        }
     }
 
     interface ApiCallback {
