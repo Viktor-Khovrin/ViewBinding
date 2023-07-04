@@ -14,4 +14,7 @@
     <string name="radio_button_genres">Comedy</string>
     <string name="radio_button_playing">Filming</string>
     <string name="radio_group_header">Подборка на главном экране:</string>
+    <string name="downloaded_to_gallery">Saved in Gallery</string>
+    <string name="open">To Gallery</string>
+    <string name="permission_storage">Denied. Add nesesary permission</string>
 </resources>

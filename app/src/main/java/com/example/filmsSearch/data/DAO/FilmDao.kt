@@ -1,19 +1,19 @@
 package com.example.filmsSearch.data.DAO
 
-import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.example.filmsSearch.data.Entity.Film
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface FilmDao {
     //Query for all from table
     @Query("SELECT * FROM cached_films")
-    fun getCachedFilms(): LiveData<List<Film>>
-
+//    fun getCachedFilms(): LiveData<List<Film>>
+    fun getCachedFilms(): Flow<List<Film>>
     @Update
     fun updateFilmInDb(film: Film)
 

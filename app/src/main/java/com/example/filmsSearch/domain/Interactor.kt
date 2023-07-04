@@ -1,6 +1,5 @@
 package com.example.filmsSearch.domain
 
-import androidx.lifecycle.LiveData
 import com.example.filmsSearch.App
 import com.example.filmsSearch.R
 import com.example.filmsSearch.data.Entity.Film
@@ -10,7 +9,11 @@ import com.example.filmsSearch.data.TmdbApi
 import com.example.filmsSearch.data.sp.PreferenceProvider
 import com.example.filmsSearch.utils.ApiKey
 import com.example.filmsSearch.utils.Converter
-import com.example.filmsSearch.view.viewmodel.HomeFragmentViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -19,8 +22,10 @@ class Interactor(private val repo: MainRepository,
                  private val retrofitService: TmdbApi,
                  private val preferences: PreferenceProvider) {
     val context = App.instance
+    val scope: CoroutineScope = CoroutineScope(Dispatchers.IO)
+    val progressBarStatus = Channel<Boolean>(Channel.CONFLATED)
 
-    fun getFilmsFromApi(page: Int, callback: HomeFragmentViewModel.ApiCallback) {
+    fun getFilmsFromApi(page: Int) {
         var top250 : String? = null
         var ticketsOnSale: String? = null
         var genres: String? = null
@@ -36,6 +41,8 @@ class Interactor(private val repo: MainRepository,
                 genres = "комедия"
             }
         }
+
+        scope.launch { progressBarStatus.send(true) }
         retrofitService.getFilms(ApiKey.API,
                                 page,
                                 top250,
@@ -45,20 +52,25 @@ class Interactor(private val repo: MainRepository,
                 Callback<TmdbResultsDto> {
                 override fun onResponse(call: Call<TmdbResultsDto>, response: Response<TmdbResultsDto>) {
                     val list = Converter.convertApiListToDtoList(response.body()?.docs)
-                    repo.clearDB()
-                    repo.putToDb(list)
-                    callback.onSuccess()
+                    scope.launch {
+//                        repo.clearDB()
+                        repo.putToDb(list)
+                        progressBarStatus.send(false)
+                    }
+                    setCurrentQueryTime()
                 }
 
                 override fun onFailure(call: Call<TmdbResultsDto>, t: Throwable) {
-                    //В случае провала вызываем другой метод коллбека
-                    callback.onFailure()
+                    scope.launch {
+                        getFilmsFromDB()
+                        progressBarStatus.send(false)
+                    }
                 }
             }
         )
     }
 
-    fun getFilmsFromDB(): LiveData<List<Film>> = repo.getAllFromDB()
+    fun getFilmsFromDB(): Flow<List<Film>> = repo.getAllFromDB()
 
     fun getOneFilmFromDB(id: Int):Film = repo.getById(id)
 
