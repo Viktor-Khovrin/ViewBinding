@@ -2,7 +2,7 @@ package com.example.filmsSearch.data
 
 import com.example.filmsSearch.data.DAO.FilmDao
 import com.example.filmsSearch.data.Entity.Film
-import kotlinx.coroutines.flow.Flow
+import io.reactivex.rxjava3.core.Observable
 
 //class MainRepository(databaseHelper: DatabaseHelper) {
 //    private val sqlDB = databaseHelper.readableDatabase
@@ -50,7 +50,7 @@ class MainRepository(private val filmDao: FilmDao) {
             filmDao.updateFilmInDb(film)
     }
 
-    fun getAllFromDB(): Flow<List<Film>> = filmDao.getCachedFilms()
+    fun getAllFromDB(): Observable<List<Film>> = filmDao.getCachedFilms()
 
     fun getById(id: Int): Film{
         return filmDao.getOneCashedFilm(id)

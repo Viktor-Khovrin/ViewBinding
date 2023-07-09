@@ -12,15 +12,15 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.filmsSearch.data.Entity.Film
 import com.example.filmsSearch.databinding.FragmentHomeBinding
 import com.example.filmsSearch.utils.AnimationHelper
+import com.example.filmsSearch.utils.AutoDisposable
+import com.example.filmsSearch.utils.addTo
 import com.example.filmsSearch.view.MainActivity
 import com.example.filmsSearch.view.rv_adapters.FilmListRecyclerAdapter
 import com.example.filmsSearch.view.rv_adapters.TopSpacingItemDecoration
 import com.example.filmsSearch.view.viewmodel.HomeFragmentViewModel
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.schedulers.Schedulers
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.util.Locale
 
 class HomeFragment : Fragment() {
@@ -31,6 +31,7 @@ class HomeFragment : Fragment() {
         ViewModelProvider(requireActivity()).get(HomeFragmentViewModel::class.java)
     }
     private lateinit var scope: CoroutineScope
+    private val autoDisposable = AutoDisposable()
 
     private var filmsDataBase = listOf<Film>()
         set(value) {
@@ -51,27 +52,26 @@ class HomeFragment : Fragment() {
         AnimationHelper.performFragmentCircularRevealAnimation(binding.homeFragmentRoot, requireActivity(), 1)
         initPullToRefresh()
         initRecyclerView()
-        scope = CoroutineScope(Dispatchers.IO).also {
-            scope ->
-            scope.launch {
-                viewModel.filmsListFlow.collect{
-                    withContext(Dispatchers.Main){
-                        filmsDataBase = it
-                        filmsAdapter.addItems(it)
-                    }
-                }
+        viewModel.showProgressBar
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe {
+                binding.progressBar.isVisible = it
             }
-            scope.launch {
-                for (element in viewModel.showProgressBar){
-                    launch(Dispatchers.Main){
-                        binding.progressBar.isVisible = element
-                    }
-                }
+            .addTo(autoDisposable)
+        viewModel.filmsListFlow
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe {
+                list ->
+                filmsDataBase = list
+                filmsAdapter.addItems(list)
             }
-        }
+            .addTo(autoDisposable)
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        autoDisposable.bindTo(lifecycle)
         @Suppress("DEPRECATION")
         retainInstance = true
     }
@@ -129,7 +129,6 @@ class HomeFragment : Fragment() {
 
     override fun onStop() {
         super.onStop()
-        scope.cancel()
     }
     companion object{
         private const val DECORATION_PADDING = 8

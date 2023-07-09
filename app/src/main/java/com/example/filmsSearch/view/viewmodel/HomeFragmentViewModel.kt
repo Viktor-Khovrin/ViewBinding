@@ -4,13 +4,13 @@ import androidx.lifecycle.ViewModel
 import com.example.filmsSearch.App
 import com.example.filmsSearch.data.Entity.Film
 import com.example.filmsSearch.domain.Interactor
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.Flow
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.subjects.BehaviorSubject
 import javax.inject.Inject
 
 class HomeFragmentViewModel: ViewModel() {
-    val showProgressBar: Channel<Boolean>
-    val filmsListFlow: Flow<List<Film>>
+    val showProgressBar: BehaviorSubject<Boolean>
+    val filmsListFlow: Observable<List<Film>>
     private val diffTimeout = 10*60*1000
     //Initializing interactor
     @Inject

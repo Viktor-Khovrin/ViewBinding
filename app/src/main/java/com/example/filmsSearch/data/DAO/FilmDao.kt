@@ -6,14 +6,15 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.example.filmsSearch.data.Entity.Film
-import kotlinx.coroutines.flow.Flow
+import io.reactivex.rxjava3.core.Observable
 
 @Dao
 interface FilmDao {
     //Query for all from table
     @Query("SELECT * FROM cached_films")
 //    fun getCachedFilms(): LiveData<List<Film>>
-    fun getCachedFilms(): Flow<List<Film>>
+    fun getCachedFilms(): Observable<List<Film>>
+
     @Update
     fun updateFilmInDb(film: Film)
 

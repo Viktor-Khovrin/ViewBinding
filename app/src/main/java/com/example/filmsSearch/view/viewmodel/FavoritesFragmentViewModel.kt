@@ -4,14 +4,14 @@ import androidx.lifecycle.ViewModel
 import com.example.filmsSearch.App
 import com.example.filmsSearch.data.Entity.Film
 import com.example.filmsSearch.domain.Interactor
-import kotlinx.coroutines.flow.Flow
+import io.reactivex.rxjava3.core.Observable
 import javax.inject.Inject
 
 class FavoritesFragmentViewModel : ViewModel() {
 
     @Inject
     lateinit var interactor: Interactor
-    lateinit var filmsListFlow: Flow<List<Film>>
+    lateinit var filmsListFlow: Observable<List<Film>>
     init {
         App.instance.dagger.inject(this)
         getFilmsFromDB()

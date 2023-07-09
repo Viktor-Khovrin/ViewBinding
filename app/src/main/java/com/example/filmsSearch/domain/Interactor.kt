@@ -9,11 +9,10 @@ import com.example.filmsSearch.data.TmdbApi
 import com.example.filmsSearch.data.sp.PreferenceProvider
 import com.example.filmsSearch.utils.ApiKey
 import com.example.filmsSearch.utils.Converter
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.launch
+import io.reactivex.rxjava3.core.Completable
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.schedulers.Schedulers
+import io.reactivex.rxjava3.subjects.BehaviorSubject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -22,8 +21,7 @@ class Interactor(private val repo: MainRepository,
                  private val retrofitService: TmdbApi,
                  private val preferences: PreferenceProvider) {
     val context = App.instance
-    val scope: CoroutineScope = CoroutineScope(Dispatchers.IO)
-    val progressBarStatus = Channel<Boolean>(Channel.CONFLATED)
+    var progressBarStatus: BehaviorSubject<Boolean> = BehaviorSubject.create()
 
     fun getFilmsFromApi(page: Int) {
         var top250 : String? = null
@@ -42,7 +40,7 @@ class Interactor(private val repo: MainRepository,
             }
         }
 
-        scope.launch { progressBarStatus.send(true) }
+        progressBarStatus.onNext(true)
         retrofitService.getFilms(ApiKey.API,
                                 page,
                                 top250,
@@ -52,25 +50,28 @@ class Interactor(private val repo: MainRepository,
                 Callback<TmdbResultsDto> {
                 override fun onResponse(call: Call<TmdbResultsDto>, response: Response<TmdbResultsDto>) {
                     val list = Converter.convertApiListToDtoList(response.body()?.docs)
-                    scope.launch {
-//                        repo.clearDB()
+                    Completable.fromSingle<List<Film>> {
                         repo.putToDb(list)
-                        progressBarStatus.send(false)
                     }
+                        .subscribeOn(Schedulers.io())
+                        .subscribe()
                     setCurrentQueryTime()
+                    progressBarStatus.onNext(false)
                 }
 
                 override fun onFailure(call: Call<TmdbResultsDto>, t: Throwable) {
-                    scope.launch {
-                        getFilmsFromDB()
-                        progressBarStatus.send(false)
+                    Completable.fromSingle<List<Film>> {
+                        repo.getAllFromDB()
                     }
+                        .subscribeOn(Schedulers.io())
+                        .subscribe()
+                    progressBarStatus.onNext(false)
                 }
             }
         )
     }
 
-    fun getFilmsFromDB(): Flow<List<Film>> = repo.getAllFromDB()
+    fun getFilmsFromDB(): Observable<List<Film>> = repo.getAllFromDB()
 
     fun getOneFilmFromDB(id: Int):Film = repo.getById(id)
 

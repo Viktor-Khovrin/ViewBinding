@@ -9,15 +9,15 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.filmsSearch.data.Entity.Film
 import com.example.filmsSearch.databinding.FragmentFavoritesBinding
+import com.example.filmsSearch.utils.AutoDisposable
+import com.example.filmsSearch.utils.addTo
 import com.example.filmsSearch.view.MainActivity
 import com.example.filmsSearch.view.rv_adapters.FilmListRecyclerAdapter
 import com.example.filmsSearch.view.rv_adapters.TopSpacingItemDecoration
 import com.example.filmsSearch.view.viewmodel.FavoritesFragmentViewModel
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.schedulers.Schedulers
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class FavoritesFragment : Fragment() {
     private lateinit var filmsAdapter: FilmListRecyclerAdapter
@@ -27,6 +27,7 @@ class FavoritesFragment : Fragment() {
         ViewModelProvider(requireActivity()).get(FavoritesFragmentViewModel::class.java)
     }
     private lateinit var scope: CoroutineScope
+    private val autoDisposable = AutoDisposable()
 
     private val binding get() = bindingFavorites!!
     private var filmsDataBase = listOf<Film>()
@@ -36,6 +37,10 @@ class FavoritesFragment : Fragment() {
             filmsAdapter.addItems(field)
         }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        autoDisposable.bindTo(lifecycle)
+        super.onCreate(savedInstanceState)
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -46,16 +51,14 @@ class FavoritesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        scope = CoroutineScope(Dispatchers.IO).also {scope ->
-            scope.launch{
-                viewModel.filmsListFlow.collect{
-                    withContext(Dispatchers.Main){
-                        filmsDataBase = it.filter{it.isInFavorites}
-                        filmsAdapter.addItems(it.filter{it.isInFavorites})
-                    }
-                }
+        viewModel.filmsListFlow
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe {
+                filmsDataBase = it.filter { it.isInFavorites }
+                filmsAdapter.addItems(it.filter { it.isInFavorites})
             }
-        }
+            .addTo(autoDisposable)
         binding.favoritesRecycler
             .apply {
                 filmsAdapter = FilmListRecyclerAdapter(object : FilmListRecyclerAdapter.OnItemClickListener {
@@ -77,6 +80,5 @@ class FavoritesFragment : Fragment() {
 
     override fun onStop() {
         super.onStop()
-        scope.cancel()
     }
 }
