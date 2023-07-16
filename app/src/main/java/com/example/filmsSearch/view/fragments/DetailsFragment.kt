@@ -167,29 +167,30 @@ class DetailsFragment : Fragment() {
         }
         //Создаем родительский скоуп с диспатчером Main потока, так как будем взаимодействовать с UI
         MainScope().launch {
-            //Включаем Прогресс-бар
-            binding.progressBar.isVisible = true
-            //Создаем через async, так как нам нужен результат от работы, то есть Bitmap
-            val job = scope.async {
-                viewModel.loadWallpaper(film.poster)
-            }
-            //Сохраняем в галерею, как только файл загрузится
-            saveToGallery(job.await())
-            //Выводим снекбар с кнопкой перейти в галерею
-            Snackbar.make(
-                binding.root,
-                R.string.downloaded_to_gallery,
-                Snackbar.LENGTH_LONG
-            )
-                .setAction(R.string.open) {
-                    val intent = Intent()
-                    intent.action = Intent.ACTION_VIEW
-                    intent.type = "image/*"
-                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                    startActivity(intent)
+            if (!film.poster.isNullOrBlank()) {
+                //Включаем Прогресс-бар
+                binding.progressBar.isVisible = true
+                //Создаем через async, так как нам нужен результат от работы, то есть Bitmap
+                val job = scope.async {
+                    viewModel.loadWallpaper(film.poster!!)
                 }
-                .show()
-
+                //Сохраняем в галерею, как только файл загрузится
+                saveToGallery(job.await())
+                //Выводим снекбар с кнопкой перейти в галерею
+                Snackbar.make(
+                    binding.root,
+                    R.string.downloaded_to_gallery,
+                    Snackbar.LENGTH_LONG
+                )
+                    .setAction(R.string.open) {
+                        val intent = Intent()
+                        intent.action = Intent.ACTION_VIEW
+                        intent.type = "image/*"
+                        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                        startActivity(intent)
+                    }
+                    .show()
+            }
             //Отключаем Прогресс-бар
             binding.progressBar.isVisible = false
         }

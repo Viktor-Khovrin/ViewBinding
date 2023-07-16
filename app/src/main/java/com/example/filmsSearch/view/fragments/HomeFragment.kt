@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -19,9 +20,14 @@ import com.example.filmsSearch.view.rv_adapters.FilmListRecyclerAdapter
 import com.example.filmsSearch.view.rv_adapters.TopSpacingItemDecoration
 import com.example.filmsSearch.view.viewmodel.HomeFragmentViewModel
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.core.ObservableEmitter
+import io.reactivex.rxjava3.core.ObservableOnSubscribe
+import io.reactivex.rxjava3.kotlin.subscribeBy
 import io.reactivex.rxjava3.schedulers.Schedulers
 import kotlinx.coroutines.CoroutineScope
 import java.util.Locale
+import java.util.concurrent.TimeUnit
 
 class HomeFragment : Fragment() {
     private var bindingHome: FragmentHomeBinding? = null
@@ -52,6 +58,7 @@ class HomeFragment : Fragment() {
         AnimationHelper.performFragmentCircularRevealAnimation(binding.homeFragmentRoot, requireActivity(), 1)
         initPullToRefresh()
         initRecyclerView()
+        initSearchView()
         viewModel.showProgressBar
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -69,6 +76,73 @@ class HomeFragment : Fragment() {
             }
             .addTo(autoDisposable)
     }
+
+    private fun initSearchView() {
+        binding.searchView.setOnClickListener{
+            binding.searchView.isIconified = false
+        }
+
+        Observable.create(object : ObservableOnSubscribe<String> {
+            override fun subscribe(subscriber: ObservableEmitter<String>) {
+                binding.searchView.setOnQueryTextListener(object :
+                    SearchView.OnQueryTextListener {
+                    override fun onQueryTextChange(newText: String): Boolean {
+                        filmsAdapter.items.clear()
+                        subscriber.onNext(newText)
+                        return false
+                    }
+
+                    override fun onQueryTextSubmit(query: String): Boolean {
+                        subscriber.onNext(query)
+                        return false
+                    }
+                })
+            }
+        })
+            .subscribeOn(Schedulers.io())
+            .map { it.lowercase(Locale.getDefault()).trim()}
+            .debounce(500, TimeUnit.MILLISECONDS)
+            .filter {
+                viewModel.getFilms()
+                it.isNotBlank()
+            }
+            .flatMap {
+                viewModel.getSearchResult(1, it)
+            }
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeBy (
+                onError = {
+                    Toast.makeText(requireContext(),"Error in search results!", Toast.LENGTH_LONG)
+                        .show()
+                },
+                onNext = {
+                    filmsAdapter.addItems(it)
+                }
+                    )
+            .addTo(autoDisposable)
+
+//        binding.searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
+//            override fun onQueryTextSubmit(query: String?): Boolean {
+//                return true
+//            }
+//
+//            override fun onQueryTextChange(newText: String?): Boolean {
+//                if(newText?.isEmpty() == true){
+//                    filmsAdapter.addItems(filmsDataBase)
+//                    return true
+//                }
+//                val result = filmsDataBase.filter {
+//                    it.title.lowercase(Locale.getDefault()).contains(
+//                        newText?.lowercase(Locale.getDefault())
+//                            .toString())
+//                }
+//                filmsAdapter.addItems(result)
+//                return true
+//            }
+//        })
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         autoDisposable.bindTo(lifecycle)
@@ -89,29 +163,6 @@ class HomeFragment : Fragment() {
             addItemDecoration(decorator)
         }
 
-        binding.searchView.setOnClickListener{
-            binding.searchView.isIconified = false
-        }
-
-        binding.searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                return true
-            }
-
-            override fun onQueryTextChange(newText: String?): Boolean {
-                if(newText?.isEmpty() == true){
-                    filmsAdapter.addItems(filmsDataBase)
-                    return true
-                }
-                val result = filmsDataBase.filter {
-                    it.title.lowercase(Locale.getDefault()).contains(
-                        newText?.lowercase(Locale.getDefault())
-                        .toString())
-                }
-                filmsAdapter.addItems(result)
-                return true
-            }
-        })
     }
 
     private fun initPullToRefresh() {

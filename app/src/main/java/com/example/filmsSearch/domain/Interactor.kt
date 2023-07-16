@@ -20,26 +20,16 @@ import retrofit2.Response
 class Interactor(private val repo: MainRepository,
                  private val retrofitService: TmdbApi,
                  private val preferences: PreferenceProvider) {
+    //Values for API
+    var top250 : String? = null
+    var ticketsOnSale: String? = null
+    var genres: String? = null
+
     val context = App.instance
     var progressBarStatus: BehaviorSubject<Boolean> = BehaviorSubject.create()
 
     fun getFilmsFromApi(page: Int) {
-        var top250 : String? = null
-        var ticketsOnSale: String? = null
-        var genres: String? = null
-        when (getDefaultCategoryFromPreferences()){
-            context.getString(R.string.radio_button_popular) -> { }
-            context.getString(R.string.radio_button_top_rated) -> {
-                top250 = "!null"
-            }
-            context.getString(R.string.radio_button_playing) ->{
-                ticketsOnSale = "true"
-            }
-            context.getString(R.string.radio_button_genres) ->{
-                genres = "комедия"
-            }
-        }
-
+        initValues()
         progressBarStatus.onNext(true)
         retrofitService.getFilms(ApiKey.API,
                                 page,
@@ -91,4 +81,25 @@ class Interactor(private val repo: MainRepository,
     fun setWrongCurrentQueryTime() = preferences.setWrongQueryTime()
 
     fun getCurrentQueryTime() = preferences.getQueryTime()
+
+    fun getSearchResultFromApi(page: Int, search: String): Observable<List<Film>> = retrofitService
+        .getFilmsFromSearch(ApiKey.API, page, top250, ticketsOnSale, genres, search)
+        .map {
+            Converter.convertApiListToDtoList(it.docs)
+        }
+
+    fun initValues(){
+        when (getDefaultCategoryFromPreferences()){
+            context.getString(R.string.radio_button_popular) -> { }
+            context.getString(R.string.radio_button_top_rated) -> {
+                top250 = "!null"
+            }
+            context.getString(R.string.radio_button_playing) ->{
+                ticketsOnSale = "true"
+            }
+            context.getString(R.string.radio_button_genres) ->{
+                genres = "комедия"
+            }
+        }
+    }
 }
