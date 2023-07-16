@@ -28,7 +28,9 @@ class DatabaseModule {
             context,
             AppDatabase::class.java,
             "film_db"
-        ).build().filmDao()
+        )
+            .fallbackToDestructiveMigration()
+            .build().filmDao()
 
     @Singleton
     @Provides

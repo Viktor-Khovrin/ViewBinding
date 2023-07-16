@@ -5,6 +5,7 @@ import com.example.filmsSearch.data.TmdbApi
 import com.example.filmsSearch.utils.UnsafeOkHttpClient.unsafeOkHttpClient
 import dagger.Module
 import dagger.Provides
+import hu.akarnokd.rxjava3.retrofit.RxJava3CallAdapterFactory
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -34,11 +35,13 @@ class RemoteModule {
     @Provides
     @Singleton
     fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit = Retrofit.Builder()
-        //Указываем базовый URL из констант
+        //Set base URL from constant
         .baseUrl(ApiConstants.BASE_URL)
-        //Добавляем конвертер
+        //Adding converter
         .addConverterFactory(GsonConverterFactory.create())
-        //Добавляем кастомный клиент
+        //Adding RxJava
+        .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
+        //Adding custom http client
         .client(okHttpClient)
         .build()
 
