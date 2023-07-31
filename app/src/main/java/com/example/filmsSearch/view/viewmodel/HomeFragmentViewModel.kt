@@ -23,8 +23,9 @@ class HomeFragmentViewModel: ViewModel() {
     }
     fun getFilms(page: Int = 1) {
         if (interactor.getCurrentQueryTime()+diffTimeout <= System.currentTimeMillis()) {
-            filmsListFlow = interactor.getFilmsFromDB()
+//            filmsListFlow = interactor.getFilmsFromDB()
             interactor.getFilmsFromApi(page)
+            filmsListFlow = interactor.getFilmsFromDB()
         }else{filmsListFlow = interactor.getFilmsFromDB()}
     }
 

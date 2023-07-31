@@ -1,6 +1,6 @@
-package com.example.filmsSearch.utils
+package com.example.remote_module.utils
 
-import com.example.filmsSearch.BuildConfig
+import com.example.remote_module.BuildConfig
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import java.security.SecureRandom

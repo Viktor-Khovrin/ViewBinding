@@ -2,7 +2,7 @@ package com.example.filmsSearch.di.modules
 
 import android.content.Context
 import com.example.filmsSearch.data.MainRepository
-import com.example.filmsSearch.data.TmdbApi
+import com.example.remote_module.TmdbApi
 import com.example.filmsSearch.data.sp.PreferenceProvider
 import com.example.filmsSearch.domain.Interactor
 import dagger.Module
@@ -21,7 +21,7 @@ class DomainModule (val context: Context){
     @Singleton
     @Provides
     fun provideInteractor(repository: MainRepository,
-                          tmdbApi: TmdbApi,
+                          tmdbApi: com.example.remote_module.TmdbApi,
                           preferenceProvider: PreferenceProvider)
             = Interactor(repo = repository,
                          retrofitService = tmdbApi,

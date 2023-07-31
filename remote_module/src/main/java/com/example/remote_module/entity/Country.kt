@@ -1,9 +1,9 @@
-package com.example.filmsSearch.data.Entity
+package com.example.remote_module.entity
 
 
 import com.google.gson.annotations.SerializedName
 
-data class Genre(
+data class Country(
     @SerializedName("name")
     val name: String
 )

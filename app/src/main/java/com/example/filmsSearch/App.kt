@@ -5,7 +5,7 @@ import com.example.filmsSearch.di.AppComponent
 import com.example.filmsSearch.di.DaggerAppComponent
 import com.example.filmsSearch.di.modules.DatabaseModule
 import com.example.filmsSearch.di.modules.DomainModule
-import com.example.filmsSearch.di.modules.RemoteModule
+import com.example.remote_module.DaggerRemoteComponent
 
 class App : Application() {
     lateinit var dagger: AppComponent
@@ -13,10 +13,11 @@ class App : Application() {
     override fun onCreate() {
         super.onCreate()
         instance = this
-        //Создаем компонент
+        //Create Component
+        val remoteProvider = DaggerRemoteComponent.create()
         dagger = DaggerAppComponent
             .builder()
-            .remoteModule(RemoteModule())
+            .remoteProvider(remoteProvider)
             .databaseModule(DatabaseModule())
             .domainModule(DomainModule(this))
             .build()

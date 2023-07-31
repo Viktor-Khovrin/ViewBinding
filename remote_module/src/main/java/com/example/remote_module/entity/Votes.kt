@@ -1,17 +1,17 @@
-package com.example.filmsSearch.data.Entity
+package com.example.remote_module.entity
 
 
 import com.google.gson.annotations.SerializedName
 
-data class Rating(
+data class Votes(
     @SerializedName("await")
-    val await: Any?,
+    val await: Int,
     @SerializedName("filmCritics")
-    val filmCritics: Double,
+    val filmCritics: Int,
     @SerializedName("imdb")
-    val imdb: Double,
+    val imdb: Int,
     @SerializedName("kp")
-    val kp: Double,
+    val kp: Int,
     @SerializedName("russianFilmCritics")
-    val russianFilmCritics: Double
+    val russianFilmCritics: Int
 )

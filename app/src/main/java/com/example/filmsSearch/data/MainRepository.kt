@@ -52,7 +52,7 @@ class MainRepository(private val filmDao: FilmDao) {
 
     fun getAllFromDB(): Observable<List<Film>> = filmDao.getCachedFilms()
 
-    fun getById(id: Int): Film{
+    fun getById(id: Int): Film {
         return filmDao.getOneCashedFilm(id)
     }
 }

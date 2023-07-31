@@ -3,12 +3,12 @@ package com.example.filmsSearch.domain
 import com.example.filmsSearch.App
 import com.example.filmsSearch.R
 import com.example.filmsSearch.data.Entity.Film
-import com.example.filmsSearch.data.Entity.TmdbResultsDto
 import com.example.filmsSearch.data.MainRepository
-import com.example.filmsSearch.data.TmdbApi
 import com.example.filmsSearch.data.sp.PreferenceProvider
 import com.example.filmsSearch.utils.ApiKey
 import com.example.filmsSearch.utils.Converter
+import com.example.remote_module.TmdbApi
+import com.example.remote_module.entity.TmdbResultsDto
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.schedulers.Schedulers
@@ -63,9 +63,9 @@ class Interactor(private val repo: MainRepository,
 
     fun getFilmsFromDB(): Observable<List<Film>> = repo.getAllFromDB()
 
-    fun getOneFilmFromDB(id: Int):Film = repo.getById(id)
+    fun getOneFilmFromDB(id: Int): Film = repo.getById(id)
 
-    fun updateFilmInDb(film:Film) {
+    fun updateFilmInDb(film: Film) {
         repo.updateInDb(film)
     }
 

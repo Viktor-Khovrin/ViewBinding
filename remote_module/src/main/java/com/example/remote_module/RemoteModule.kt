@@ -1,8 +1,6 @@
-package com.example.filmsSearch.di.modules
+package com.example.remote_module
 
-import com.example.filmsSearch.data.ApiConstants
-import com.example.filmsSearch.data.TmdbApi
-import com.example.filmsSearch.utils.UnsafeOkHttpClient.unsafeOkHttpClient
+import com.example.remote_module.utils.UnsafeOkHttpClient.unsafeOkHttpClient
 import dagger.Module
 import dagger.Provides
 import hu.akarnokd.rxjava3.retrofit.RxJava3CallAdapterFactory
@@ -36,7 +34,7 @@ class RemoteModule {
     @Singleton
     fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit = Retrofit.Builder()
         //Set base URL from constant
-        .baseUrl(ApiConstants.BASE_URL)
+        .baseUrl(com.example.remote_module.entity.ApiConstants.BASE_URL)
         //Adding converter
         .addConverterFactory(GsonConverterFactory.create())
         //Adding RxJava
@@ -47,5 +45,5 @@ class RemoteModule {
 
     @Provides
     @Singleton
-    fun provideTmdbApi(retrofit: Retrofit): TmdbApi = retrofit.create(TmdbApi::class.java)
+    fun provideTmdbApi(retrofit: Retrofit): com.example.remote_module.TmdbApi = retrofit.create(com.example.remote_module.TmdbApi::class.java)
 }

@@ -3,8 +3,8 @@ package com.example.filmsSearch.view.rv_adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.filmsSearch.databinding.FilmItemBinding
 import com.example.filmsSearch.data.Entity.Film
+import com.example.filmsSearch.databinding.FilmItemBinding
 import com.example.filmsSearch.view.rv_viewholders.FilmViewHolder
 
 //import kotlinx.android.synthetic.main.film_item.view.*
