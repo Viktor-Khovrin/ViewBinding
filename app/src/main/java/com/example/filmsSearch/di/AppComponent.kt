@@ -14,11 +14,7 @@ import javax.inject.Singleton
 @Component(
     dependencies = [RemoteProvider::class,
                     DbProvider::class],
-//        DatabaseModule::class],
-    modules = [
-        DomainModule::class//,
-        //DatabaseModule::class
-    ]
+    modules = [DomainModule::class]
 )
 
 interface AppComponent {

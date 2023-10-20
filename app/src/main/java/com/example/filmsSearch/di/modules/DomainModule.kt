@@ -2,7 +2,6 @@ package com.example.filmsSearch.di.modules
 
 import android.content.Context
 import com.example.db_module.MainRepository
-import com.example.db_module.dao.FilmDao
 import com.example.filmsSearch.data.sp.PreferenceProvider
 import com.example.filmsSearch.domain.Interactor
 import com.example.remote_module.TmdbApi
@@ -19,10 +18,10 @@ class DomainModule (val context: Context){
     @Provides
     fun providePreferences(context: Context) = PreferenceProvider(context)
 
-    @Singleton
-    @Provides
-    fun provideRepository(filmDao: FilmDao) = MainRepository(filmDao)
-
+//    @Singleton
+//    @Provides
+//    fun provideRepository(filmDao: FilmDao) = MainRepository(filmDao)
+//
     @Singleton
     @Provides
     fun provideInteractor(repository: MainRepository,

@@ -4,5 +4,7 @@ import dagger.Component
 import javax.inject.Singleton
 
 @Singleton
-@Component(modules = [DatabaseModule::class])
+@Component(
+//    dependencies = [AppDatabase::class],
+    modules = [DatabaseModule::class])
 interface DbComponent: DbProvider
