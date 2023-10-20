@@ -18,8 +18,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
+import com.example.db_module.entity.Film
 import com.example.filmsSearch.R
-import com.example.filmsSearch.data.Entity.Film
 import com.example.filmsSearch.databinding.FragmentDetailsBinding
 import com.example.filmsSearch.utils.MessageEvent
 import com.example.filmsSearch.view.viewmodel.DetailsFragmentViewModel

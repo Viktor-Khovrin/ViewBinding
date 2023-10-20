@@ -1,10 +1,11 @@
 package com.example.filmsSearch.di.modules
 
 import android.content.Context
-import com.example.filmsSearch.data.MainRepository
-import com.example.remote_module.TmdbApi
+import com.example.db_module.MainRepository
+import com.example.db_module.dao.FilmDao
 import com.example.filmsSearch.data.sp.PreferenceProvider
 import com.example.filmsSearch.domain.Interactor
+import com.example.remote_module.TmdbApi
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -20,8 +21,12 @@ class DomainModule (val context: Context){
 
     @Singleton
     @Provides
+    fun provideRepository(filmDao: FilmDao) = MainRepository(filmDao)
+
+    @Singleton
+    @Provides
     fun provideInteractor(repository: MainRepository,
-                          tmdbApi: com.example.remote_module.TmdbApi,
+                          tmdbApi: TmdbApi,
                           preferenceProvider: PreferenceProvider)
             = Interactor(repo = repository,
                          retrofitService = tmdbApi,

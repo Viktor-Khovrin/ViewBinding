@@ -54,6 +54,7 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'com.google.android.gms:play-services-wearable:18.0.0'
     implementation project(path: ':remote_module')
+    implementation project(path: ':db_module')
 
     //Tests
     testImplementation 'junit:junit:4.13.2'
@@ -84,8 +85,10 @@ dependencies {
     implementation dagger
     kapt daggerCompiler
     //ROOM
-    implementation "androidx.room:room-runtime:2.5.2"
-    kapt "androidx.room:room-compiler:2.5.2"
+//    implementation room
+//    kapt roomCompiler
+//    implementation "androidx.room:room-runtime:2.5.2"
+//    kapt "androidx.room:room-compiler:2.5.2"
     //EventBus
     implementation 'org.greenrobot:eventbus:3.3.1'
     //ViewModels (val mainActivityViewModel: MainActivityViewModel by viewModels())
@@ -95,9 +98,11 @@ dependencies {
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3'
     //Coroutines for ROOM
-    implementation "androidx.room:room-ktx:2.5.2"
+//    implementation "androidx.room:room-ktx:2.5.2"
+//    implementation roomCoroutines
     //Room
-    implementation "androidx.room:room-rxjava3:2.5.2"
+//    implementation "androidx.room:room-rxjava3:2.5.2"
+//    implementation roomRxJava
     //RxJava
     implementation 'io.reactivex.rxjava3:rxandroid:3.0.2'
     implementation 'io.reactivex.rxjava3:rxjava:3.1.6'

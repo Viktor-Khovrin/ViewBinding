@@ -1,10 +1,9 @@
-package com.example.filmsSearch.di.modules
+package com.example.db_module
 
 import android.content.Context
 import androidx.room.Room
-import com.example.filmsSearch.data.DAO.FilmDao
-import com.example.filmsSearch.data.MainRepository
-import com.example.filmsSearch.data.db.AppDatabase
+import com.example.db_module.dao.FilmDao
+import com.example.db_module.db.AppDatabase
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -20,10 +19,10 @@ import javax.inject.Singleton
 //    fun provideRepository(databaseHelper: DatabaseHelper) = MainRepository(databaseHelper)
 //}
 @Module
-class DatabaseModule {
+class DatabaseModule (private val context: Context) {
     @Singleton
     @Provides
-    fun provideFilmDao(context: Context) =
+    fun provideFilmDao() =
         Room.databaseBuilder(
             context,
             AppDatabase::class.java,

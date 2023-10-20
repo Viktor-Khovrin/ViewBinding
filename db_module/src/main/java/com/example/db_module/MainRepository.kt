@@ -1,7 +1,7 @@
-package com.example.filmsSearch.data
+package com.example.db_module
 
-import com.example.filmsSearch.data.DAO.FilmDao
-import com.example.filmsSearch.data.Entity.Film
+import com.example.db_module.dao.FilmDao
+import com.example.db_module.entity.Film
 import io.reactivex.rxjava3.core.Observable
 
 //class MainRepository(databaseHelper: DatabaseHelper) {

@@ -1,6 +1,7 @@
 package com.example.filmsSearch.utils
 
-import com.example.filmsSearch.data.Entity.Film
+import com.example.db_module.entity.Film
+
 
 object Converter {
     fun convertApiListToDtoList(list: List<com.example.remote_module.entity.Doc>?): List<Film> {

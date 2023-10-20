@@ -1,9 +1,10 @@
 package com.example.filmsSearch
 
 import android.app.Application
+import com.example.db_module.DaggerDbComponent
+import com.example.db_module.DatabaseModule
 import com.example.filmsSearch.di.AppComponent
 import com.example.filmsSearch.di.DaggerAppComponent
-import com.example.filmsSearch.di.modules.DatabaseModule
 import com.example.filmsSearch.di.modules.DomainModule
 import com.example.remote_module.DaggerRemoteComponent
 
@@ -15,10 +16,11 @@ class App : Application() {
         instance = this
         //Create Component
         val remoteProvider = DaggerRemoteComponent.create()
+//        val dbProvider = DaggerDbComponent.create()
         dagger = DaggerAppComponent
             .builder()
             .remoteProvider(remoteProvider)
-            .databaseModule(DatabaseModule())
+            .databaseModule(instance.baseContext)
             .domainModule(DomainModule(this))
             .build()
     }

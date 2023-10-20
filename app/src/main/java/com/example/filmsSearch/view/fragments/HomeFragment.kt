@@ -10,7 +10,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.filmsSearch.data.Entity.Film
+import com.example.db_module.entity.Film
 import com.example.filmsSearch.databinding.FragmentHomeBinding
 import com.example.filmsSearch.utils.AnimationHelper
 import com.example.filmsSearch.utils.AutoDisposable
@@ -178,9 +178,6 @@ class HomeFragment : Fragment() {
         super.onDestroyView()
     }
 
-    override fun onStop() {
-        super.onStop()
-    }
     companion object{
         private const val DECORATION_PADDING = 8
     }

@@ -1,6 +1,6 @@
 package com.example.filmsSearch.di
 
-import com.example.filmsSearch.di.modules.DatabaseModule
+import com.example.db_module.DbProvider
 import com.example.filmsSearch.di.modules.DomainModule
 import com.example.filmsSearch.view.viewmodel.DetailsFragmentViewModel
 import com.example.filmsSearch.view.viewmodel.FavoritesFragmentViewModel
@@ -12,10 +12,12 @@ import javax.inject.Singleton
 
 @Singleton
 @Component(
-    dependencies = [RemoteProvider::class],
+    dependencies = [RemoteProvider::class,
+                    DbProvider::class],
+//        DatabaseModule::class],
     modules = [
-        DatabaseModule::class,
-        DomainModule::class
+        DomainModule::class//,
+        //DatabaseModule::class
     ]
 )
 

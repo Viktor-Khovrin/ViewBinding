@@ -1,11 +1,11 @@
-package com.example.filmsSearch.data.DAO
+package com.example.db_module.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
-import com.example.filmsSearch.data.Entity.Film
+import com.example.db_module.entity.Film
 import io.reactivex.rxjava3.core.Observable
 
 @Dao

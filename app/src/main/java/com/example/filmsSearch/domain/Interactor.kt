@@ -1,9 +1,9 @@
 package com.example.filmsSearch.domain
 
+import com.example.db_module.MainRepository
+import com.example.db_module.entity.Film
 import com.example.filmsSearch.App
 import com.example.filmsSearch.R
-import com.example.filmsSearch.data.Entity.Film
-import com.example.filmsSearch.data.MainRepository
 import com.example.filmsSearch.data.sp.PreferenceProvider
 import com.example.filmsSearch.utils.ApiKey
 import com.example.filmsSearch.utils.Converter

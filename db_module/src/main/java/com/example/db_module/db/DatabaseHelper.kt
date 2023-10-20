@@ -1,4 +1,4 @@
-package com.example.filmsSearch.data.db
+package com.example.db_module.db
 
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase

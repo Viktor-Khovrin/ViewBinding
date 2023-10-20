@@ -5,15 +5,13 @@ import android.graphics.BitmapFactory
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
+import com.example.db_module.entity.Film
 import com.example.filmsSearch.App
-import com.example.filmsSearch.data.Entity.Film
 import com.example.filmsSearch.domain.Interactor
-import com.example.filmsSearch.utils.MessageEvent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.greenrobot.eventbus.EventBus
-import org.greenrobot.eventbus.Subscribe
 import java.net.URL
 import javax.inject.Inject
 import kotlin.coroutines.resume
@@ -43,11 +41,6 @@ class DetailsFragmentViewModel: ViewModel() {
 
     private fun getOneFilmFromDB(filmId: Int){
         filmLiveData.value = interactor.getOneFilmFromDB(filmId)
-    }
-
-    @Subscribe
-    fun onMessageEvent(event: MessageEvent) {
-//        putOneFilmToDB(filmLiveData.value as Film)
     }
 
     fun putOneFilmToDB(film: Film){
