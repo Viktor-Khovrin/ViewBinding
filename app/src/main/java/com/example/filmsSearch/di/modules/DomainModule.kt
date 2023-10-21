@@ -21,7 +21,7 @@ class DomainModule (val context: Context){
 //    @Singleton
 //    @Provides
 //    fun provideRepository(filmDao: FilmDao) = MainRepository(filmDao)
-//
+
     @Singleton
     @Provides
     fun provideInteractor(repository: MainRepository,

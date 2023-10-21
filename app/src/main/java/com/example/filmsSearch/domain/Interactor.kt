@@ -8,14 +8,10 @@ import com.example.filmsSearch.data.sp.PreferenceProvider
 import com.example.filmsSearch.utils.ApiKey
 import com.example.filmsSearch.utils.Converter
 import com.example.remote_module.TmdbApi
-import com.example.remote_module.entity.TmdbResultsDto
-import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.kotlin.subscribeBy
 import io.reactivex.rxjava3.schedulers.Schedulers
 import io.reactivex.rxjava3.subjects.BehaviorSubject
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class Interactor(private val repo: MainRepository,
                  private val retrofitService: TmdbApi,
@@ -36,29 +32,18 @@ class Interactor(private val repo: MainRepository,
                                 top250,
                                 ticketsOnSale,
                                 genres)
-            .enqueue(object :
-                Callback<TmdbResultsDto> {
-                override fun onResponse(call: Call<TmdbResultsDto>, response: Response<TmdbResultsDto>) {
-                    val list = Converter.convertApiListToDtoList(response.body()?.docs)
-                    Completable.fromSingle<List<Film>> {
-                        repo.putToDb(list)
-                    }
-                        .subscribeOn(Schedulers.io())
-                        .subscribe()
-                    setCurrentQueryTime()
-                    progressBarStatus.onNext(false)
-                }
-
-                override fun onFailure(call: Call<TmdbResultsDto>, t: Throwable) {
-                    Completable.fromSingle<List<Film>> {
-                        repo.getAllFromDB()
-                    }
-                        .subscribeOn(Schedulers.io())
-                        .subscribe()
-                    progressBarStatus.onNext(false)
-                }
+            .subscribeOn(Schedulers.io())
+            .map {
+                Converter.convertApiListToDtoList(it.docs)
             }
-        )
+            .subscribeBy(
+                onError = {progressBarStatus.onNext(false)},
+                onNext = {
+                    progressBarStatus.onNext(false)
+                    repo.putToDb(it)
+                    setCurrentQueryTime()
+                }
+            )
     }
 
     fun getFilmsFromDB(): Observable<List<Film>> = repo.getAllFromDB()

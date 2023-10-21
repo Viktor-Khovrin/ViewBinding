@@ -2,7 +2,6 @@ package com.example.remote_module
 
 import com.example.remote_module.entity.TmdbResultsDto
 import io.reactivex.rxjava3.core.Observable
-import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Query
@@ -19,7 +18,7 @@ interface TmdbApi {
         @Query("genres.name") genres: String?,    // announced
         @Query("limit") limit: Int = 10
 //        @Query("type") type: String = ""        // tv-series, tv-show
-    ): Call<TmdbResultsDto>
+    ): Observable<TmdbResultsDto>
 
     @GET("v1.3/movie")
     fun getFilmsFromSearch(

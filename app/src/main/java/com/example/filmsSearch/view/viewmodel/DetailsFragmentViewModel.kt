@@ -11,7 +11,6 @@ import com.example.filmsSearch.domain.Interactor
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.greenrobot.eventbus.EventBus
 import java.net.URL
 import javax.inject.Inject
 import kotlin.coroutines.resume
@@ -25,9 +24,9 @@ class DetailsFragmentViewModel: ViewModel() {
     private val observer = Observer<Film> { putOneFilmToDB(filmLiveData.value as Film) }
     init {
         App.instance.dagger.inject(this)
-        if (!EventBus.getDefault().isRegistered(this)) {
-            EventBus.getDefault().register(this)
-        }
+//        if (!EventBus.getDefault().isRegistered(this)) {
+//            EventBus.getDefault().register(this)
+//        }
         filmLiveData.observeForever(observer)
     }
 
@@ -52,7 +51,7 @@ class DetailsFragmentViewModel: ViewModel() {
 
     override fun onCleared() {
         filmLiveData.removeObserver(observer)
-        EventBus.getDefault().unregister(this)
+//        EventBus.getDefault().unregister(this)
         super.onCleared()
     }
 }
