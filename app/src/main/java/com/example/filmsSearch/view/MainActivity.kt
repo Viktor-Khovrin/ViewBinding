@@ -1,5 +1,6 @@
 package com.example.filmsSearch.view
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -20,6 +21,10 @@ class MainActivity : AppCompatActivity() {
     private var timePressed = 0L
     private lateinit var mainBinding: ActivityMainBinding
     private lateinit var viewModel: HomeFragmentViewModel
+//    lateinit var adapter: FilmListRecyclerAdapter
+//    private var isLoading: Boolean = false
+
+    @SuppressLint("CommitTransaction")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mainBinding = ActivityMainBinding.inflate(layoutInflater)
@@ -63,6 +68,12 @@ class MainActivity : AppCompatActivity() {
                 }
                 R.id.watch_later -> {
                     Toast.makeText(this, R.string.menu_watch_later_title, Toast.LENGTH_SHORT).show()
+                    true
+                }
+                R.id.home -> {
+                    val tag = "home"
+                    val fragment = checkFragmentExistence(tag)
+                    changeFragment(fragment?: HomeFragment(), tag)
                     true
                 }
                 R.id.settings -> {

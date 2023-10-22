@@ -43,16 +43,23 @@ android {
 }
 
 apply from: "$project.rootDir/versions.gradle"
+def paging_version = '3.2.1'
 dependencies {
+//  Paging support
+    implementation "androidx.paging:paging-runtime:$paging_version"
+    // optional - RxJava3 support
+    implementation("androidx.paging:paging-rxjava3:$paging_version")
+
+
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.0'
-//    implementation 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.20'
-    implementation 'androidx.core:core-ktx:1.10.1'
+    implementation 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.0'
+    implementation 'androidx.core:core-ktx:1.12.0'
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'com.google.android.gms:play-services-wearable:18.0.0'
+    implementation 'com.google.android.gms:play-services-wearable:18.1.0'
     implementation project(path: ':remote_module')
     implementation project(path: ':db_module')
 
@@ -64,7 +71,7 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.5.1'
 
     //MaterialDesign
-    implementation 'com.google.android.material:material:1.9.0'
+    implementation 'com.google.android.material:material:1.10.0'
 
     //Coordinator layout
     implementation 'androidx.coordinatorlayout:coordinatorlayout:1.2.0'
@@ -90,7 +97,7 @@ dependencies {
 //    implementation "androidx.room:room-runtime:2.5.2"
 //    kapt "androidx.room:room-compiler:2.5.2"
     //EventBus
-    implementation 'org.greenrobot:eventbus:3.3.1'
+//    implementation 'org.greenrobot:eventbus:3.3.1'
     //ViewModels (val mainActivityViewModel: MainActivityViewModel by viewModels())
     //in Fragments by activityViewModels()
     implementation "androidx.fragment:fragment-ktx:1.6.1"
@@ -105,8 +112,9 @@ dependencies {
 //    implementation roomRxJava
     //RxJava
     implementation 'io.reactivex.rxjava3:rxandroid:3.0.2'
-    implementation 'io.reactivex.rxjava3:rxjava:3.1.6'
+    implementation 'io.reactivex.rxjava3:rxjava:3.1.8'
     implementation 'io.reactivex.rxjava3:rxkotlin:3.0.1'
     //RxJava for retrofit
     implementation "com.github.akarnokd:rxjava3-retrofit-adapter:3.0.0"
+
 }

@@ -1,5 +1,6 @@
 package com.example.filmsSearch.domain
 
+import android.annotation.SuppressLint
 import com.example.db_module.MainRepository
 import com.example.db_module.entity.Film
 import com.example.filmsSearch.App
@@ -24,6 +25,7 @@ class Interactor(private val repo: MainRepository,
     val context = App.instance
     var progressBarStatus: BehaviorSubject<Boolean> = BehaviorSubject.create()
 
+    @SuppressLint("CheckResult")
     fun getFilmsFromApi(page: Int) {
         initValues()
         progressBarStatus.onNext(true)
