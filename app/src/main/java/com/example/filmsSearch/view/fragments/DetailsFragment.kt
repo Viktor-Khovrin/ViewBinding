@@ -21,7 +21,6 @@ import com.bumptech.glide.Glide
 import com.example.db_module.entity.Film
 import com.example.filmsSearch.R
 import com.example.filmsSearch.databinding.FragmentDetailsBinding
-import com.example.filmsSearch.utils.MessageEvent
 import com.example.filmsSearch.view.viewmodel.DetailsFragmentViewModel
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.CoroutineScope
@@ -29,7 +28,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
-import org.greenrobot.eventbus.EventBus
 
 class DetailsFragment : Fragment() {
     private var bindingDetails: FragmentDetailsBinding?=null
@@ -86,7 +84,7 @@ class DetailsFragment : Fragment() {
                 film.isInFavorites = true
             }
             viewModel.filmLiveData.postValue(film)
-            EventBus.getDefault().post(MessageEvent(film.id))
+//            EventBus.getDefault().post(MessageEvent(film.id))
         }
 
         binding.detailsFabShare.setOnClickListener{
@@ -143,7 +141,9 @@ class DetailsFragment : Fragment() {
             //Открываем канал для записи на диск
             val outputStream = contentResolver.openOutputStream(uri!!)
             //Передаем нашу картинку, может сделать компрессию
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+            if (outputStream != null) {
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+            }
             //Закрываем поток
             outputStream?.close()
         } else {
