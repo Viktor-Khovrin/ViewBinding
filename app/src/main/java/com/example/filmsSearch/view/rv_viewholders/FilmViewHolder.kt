@@ -2,8 +2,8 @@ package com.example.filmsSearch.view.rv_viewholders
 
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.db_module.entity.Film
 import com.example.filmsSearch.databinding.FilmItemBinding
-import com.example.filmsSearch.data.Entity.Film
 
 //import kotlinx.android.synthetic.main.film_item.view.*
 

@@ -3,8 +3,8 @@ package com.example.filmsSearch.view.rv_adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.db_module.entity.Film
 import com.example.filmsSearch.databinding.FilmItemBinding
-import com.example.filmsSearch.data.Entity.Film
 import com.example.filmsSearch.view.rv_viewholders.FilmViewHolder
 
 //import kotlinx.android.synthetic.main.film_item.view.*
@@ -13,7 +13,7 @@ class FilmListRecyclerAdapter(private val clickListener: OnItemClickListener):
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 //    inner class ViewHolder(val binding: FilmItemBinding):RecyclerView.ViewHolder(binding.root)
 //    private lateinit var binding: FilmItemBinding
-val items = mutableListOf<Film>()
+    val items = mutableListOf<Film>()
 
     override fun getItemCount() = items.size
 
@@ -28,11 +28,6 @@ val items = mutableListOf<Film>()
             is FilmViewHolder -> {
                 holder.onBind(items[position])
                 holder.binding.itemContainer.setOnClickListener {clickListener.click(items[position])}
-//                {
-//                    itemView.item_container.setOnClickListener{
-//                        clickListener.click(items[position])
-//                    }
-//                }
             }
         }
     }
@@ -44,5 +39,7 @@ val items = mutableListOf<Film>()
     interface OnItemClickListener{
         fun click(film: Film)
     }
+
+
 
 }

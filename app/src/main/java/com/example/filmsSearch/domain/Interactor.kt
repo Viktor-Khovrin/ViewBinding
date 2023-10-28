@@ -1,21 +1,18 @@
 package com.example.filmsSearch.domain
 
+import android.annotation.SuppressLint
+import com.example.db_module.MainRepository
+import com.example.db_module.entity.Film
 import com.example.filmsSearch.App
 import com.example.filmsSearch.R
-import com.example.filmsSearch.data.Entity.Film
-import com.example.filmsSearch.data.Entity.TmdbResultsDto
-import com.example.filmsSearch.data.MainRepository
-import com.example.filmsSearch.data.TmdbApi
 import com.example.filmsSearch.data.sp.PreferenceProvider
 import com.example.filmsSearch.utils.ApiKey
 import com.example.filmsSearch.utils.Converter
-import io.reactivex.rxjava3.core.Completable
+import com.example.remote_module.TmdbApi
 import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.kotlin.subscribeBy
 import io.reactivex.rxjava3.schedulers.Schedulers
 import io.reactivex.rxjava3.subjects.BehaviorSubject
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class Interactor(private val repo: MainRepository,
                  private val retrofitService: TmdbApi,
@@ -28,6 +25,7 @@ class Interactor(private val repo: MainRepository,
     val context = App.instance
     var progressBarStatus: BehaviorSubject<Boolean> = BehaviorSubject.create()
 
+    @SuppressLint("CheckResult")
     fun getFilmsFromApi(page: Int) {
         initValues()
         progressBarStatus.onNext(true)
@@ -36,36 +34,25 @@ class Interactor(private val repo: MainRepository,
                                 top250,
                                 ticketsOnSale,
                                 genres)
-            .enqueue(object :
-                Callback<TmdbResultsDto> {
-                override fun onResponse(call: Call<TmdbResultsDto>, response: Response<TmdbResultsDto>) {
-                    val list = Converter.convertApiListToDtoList(response.body()?.docs)
-                    Completable.fromSingle<List<Film>> {
-                        repo.putToDb(list)
-                    }
-                        .subscribeOn(Schedulers.io())
-                        .subscribe()
-                    setCurrentQueryTime()
-                    progressBarStatus.onNext(false)
-                }
-
-                override fun onFailure(call: Call<TmdbResultsDto>, t: Throwable) {
-                    Completable.fromSingle<List<Film>> {
-                        repo.getAllFromDB()
-                    }
-                        .subscribeOn(Schedulers.io())
-                        .subscribe()
-                    progressBarStatus.onNext(false)
-                }
+            .subscribeOn(Schedulers.io())
+            .map {
+                Converter.convertApiListToDtoList(it.docs)
             }
-        )
+            .subscribeBy(
+                onError = {progressBarStatus.onNext(false)},
+                onNext = {
+                    progressBarStatus.onNext(false)
+                    repo.putToDb(it)
+                    setCurrentQueryTime()
+                }
+            )
     }
 
     fun getFilmsFromDB(): Observable<List<Film>> = repo.getAllFromDB()
 
-    fun getOneFilmFromDB(id: Int):Film = repo.getById(id)
+    fun getOneFilmFromDB(id: Int): Film = repo.getById(id)
 
-    fun updateFilmInDb(film:Film) {
+    fun updateFilmInDb(film: Film) {
         repo.updateInDb(film)
     }
 

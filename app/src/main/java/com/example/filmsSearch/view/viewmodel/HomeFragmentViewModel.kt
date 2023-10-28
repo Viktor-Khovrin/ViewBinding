@@ -1,8 +1,8 @@
 package com.example.filmsSearch.view.viewmodel
 
 import androidx.lifecycle.ViewModel
+import com.example.db_module.entity.Film
 import com.example.filmsSearch.App
-import com.example.filmsSearch.data.Entity.Film
 import com.example.filmsSearch.domain.Interactor
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.subjects.BehaviorSubject
@@ -23,8 +23,9 @@ class HomeFragmentViewModel: ViewModel() {
     }
     fun getFilms(page: Int = 1) {
         if (interactor.getCurrentQueryTime()+diffTimeout <= System.currentTimeMillis()) {
-            filmsListFlow = interactor.getFilmsFromDB()
+//            filmsListFlow = interactor.getFilmsFromDB()
             interactor.getFilmsFromApi(page)
+            filmsListFlow = interactor.getFilmsFromDB()
         }else{filmsListFlow = interactor.getFilmsFromDB()}
     }
 

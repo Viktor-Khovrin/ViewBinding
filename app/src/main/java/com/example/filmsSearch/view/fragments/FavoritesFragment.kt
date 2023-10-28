@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.filmsSearch.data.Entity.Film
+import com.example.db_module.entity.Film
 import com.example.filmsSearch.databinding.FragmentFavoritesBinding
 import com.example.filmsSearch.utils.AutoDisposable
 import com.example.filmsSearch.utils.addTo
@@ -78,7 +78,4 @@ class FavoritesFragment : Fragment() {
         super.onDestroyView()
     }
 
-    override fun onStop() {
-        super.onStop()
-    }
 }

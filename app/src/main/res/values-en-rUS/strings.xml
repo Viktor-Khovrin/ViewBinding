@@ -17,4 +17,5 @@
     <string name="permission_storage">Denied. Add nesesary permission</string>
     <string name="downloaded_to_gallery">Saved in Gallery</string>
     <string name="open">To Gallery</string>
+    <string name="go_home">Home</string>
 </resources>

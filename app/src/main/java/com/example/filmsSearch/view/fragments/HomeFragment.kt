@@ -10,7 +10,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.filmsSearch.data.Entity.Film
+import com.example.db_module.entity.Film
 import com.example.filmsSearch.databinding.FragmentHomeBinding
 import com.example.filmsSearch.utils.AnimationHelper
 import com.example.filmsSearch.utils.AutoDisposable
@@ -102,10 +102,10 @@ class HomeFragment : Fragment() {
             .subscribeOn(Schedulers.io())
             .map { it.lowercase(Locale.getDefault()).trim()}
             .debounce(500, TimeUnit.MILLISECONDS)
-            .filter {
-                viewModel.getFilms()
-                it.isNotBlank()
-            }
+//            .filter {
+//                viewModel.getFilms()
+//                it.isNotBlank()
+//            }
             .flatMap {
                 viewModel.getSearchResult(1, it)
             }
@@ -122,25 +122,6 @@ class HomeFragment : Fragment() {
                     )
             .addTo(autoDisposable)
 
-//        binding.searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
-//            override fun onQueryTextSubmit(query: String?): Boolean {
-//                return true
-//            }
-//
-//            override fun onQueryTextChange(newText: String?): Boolean {
-//                if(newText?.isEmpty() == true){
-//                    filmsAdapter.addItems(filmsDataBase)
-//                    return true
-//                }
-//                val result = filmsDataBase.filter {
-//                    it.title.lowercase(Locale.getDefault()).contains(
-//                        newText?.lowercase(Locale.getDefault())
-//                            .toString())
-//                }
-//                filmsAdapter.addItems(result)
-//                return true
-//            }
-//        })
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -178,9 +159,6 @@ class HomeFragment : Fragment() {
         super.onDestroyView()
     }
 
-    override fun onStop() {
-        super.onStop()
-    }
     companion object{
         private const val DECORATION_PADDING = 8
     }
