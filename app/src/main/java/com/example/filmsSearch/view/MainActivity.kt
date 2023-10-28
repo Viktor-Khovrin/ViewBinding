@@ -46,6 +46,13 @@ class MainActivity : AppCompatActivity() {
             .beginTransaction()
             .add(R.id.fragment_placeholder, HomeFragment())
             .commit()
+        if (intent != null){
+            val fragmentName = intent.getStringExtra("fragment_name")
+            val filmExtra: Film? = intent.getParcelableExtra("film")
+            if (fragmentName == "DetailsFragment" && filmExtra != null){
+                launchDetailsFragment(filmExtra)
+            }
+        }
     }
 
     fun launchDetailsFragment(film: Film) {

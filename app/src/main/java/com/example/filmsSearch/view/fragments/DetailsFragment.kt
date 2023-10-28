@@ -21,6 +21,7 @@ import com.bumptech.glide.Glide
 import com.example.db_module.entity.Film
 import com.example.filmsSearch.R
 import com.example.filmsSearch.databinding.FragmentDetailsBinding
+import com.example.filmsSearch.view.notifications.NotificationMaker
 import com.example.filmsSearch.view.viewmodel.DetailsFragmentViewModel
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.CoroutineScope
@@ -93,6 +94,9 @@ class DetailsFragment : Fragment() {
             intent.putExtra(Intent.EXTRA_TEXT, "Checkout this film: ${film.title} \n\n ${film.description}")
             intent.type = "text/plain"
             startActivity(Intent.createChooser(intent, "Share to:"))
+        }
+        binding.detailsFabWatchLater.setOnClickListener {
+            NotificationMaker.createNotification(requireContext(), film)
         }
     }
     //Having rights?
