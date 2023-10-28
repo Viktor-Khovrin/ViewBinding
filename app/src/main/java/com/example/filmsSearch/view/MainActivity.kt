@@ -1,6 +1,8 @@
 package com.example.filmsSearch.view
 
 import android.annotation.SuppressLint
+import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -9,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.db_module.entity.Film
 import com.example.filmsSearch.R
 import com.example.filmsSearch.databinding.ActivityMainBinding
+import com.example.filmsSearch.utils.PowerListener
 import com.example.filmsSearch.view.fragments.DetailsFragment
 import com.example.filmsSearch.view.fragments.FavoritesFragment
 import com.example.filmsSearch.view.fragments.HomeFragment
@@ -21,6 +24,7 @@ class MainActivity : AppCompatActivity() {
     private var timePressed = 0L
     private lateinit var mainBinding: ActivityMainBinding
     private lateinit var viewModel: HomeFragmentViewModel
+    private lateinit var powerListener: PowerListener
 //    lateinit var adapter: FilmListRecyclerAdapter
 //    private var isLoading: Boolean = false
 
@@ -30,6 +34,12 @@ class MainActivity : AppCompatActivity() {
         mainBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(mainBinding.root)
         supportActionBar?.hide()
+        powerListener = PowerListener()
+        val filters = IntentFilter().apply{
+            addAction(Intent.ACTION_BATTERY_LOW)
+            addAction(Intent.ACTION_POWER_CONNECTED)
+        }
+        registerReceiver(powerListener, filters)
         initNavigation()
         viewModel = ViewModelProvider(this)[HomeFragmentViewModel::class.java]
         supportFragmentManager
@@ -117,5 +127,9 @@ class MainActivity : AppCompatActivity() {
         const val BACK_PRESSED_TIMEOUT = 2000
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        unregisterReceiver(powerListener)
+    }
 
 }

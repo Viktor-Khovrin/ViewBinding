@@ -18,4 +18,6 @@
     <string name="downloaded_to_gallery">Сохранено в галерею</string>
     <string name="open">В галерею</string>
     <string name="go_home">Домой</string>
+    <string name="battery_is_low">Низкий заряд</string>
+    <string name="power_cord">Зарядка подключена</string>
 </resources>
