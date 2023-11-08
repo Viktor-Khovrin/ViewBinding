@@ -96,8 +96,7 @@ class DetailsFragment : Fragment() {
             startActivity(Intent.createChooser(intent, "Share to:"))
         }
         binding.detailsFabWatchLater.setOnClickListener {
-            NotificationMaker.createNotification(requireContext(), film)
-        }
+            NotificationMaker.notificationSet(requireContext(), film)        }
     }
     //Having rights?
     private fun checkPermission(): Boolean {
