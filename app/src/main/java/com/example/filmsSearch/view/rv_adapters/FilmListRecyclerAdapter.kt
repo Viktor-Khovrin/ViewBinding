@@ -7,8 +7,6 @@ import com.example.db_module.entity.Film
 import com.example.filmsSearch.databinding.FilmItemBinding
 import com.example.filmsSearch.view.rv_viewholders.FilmViewHolder
 
-//import kotlinx.android.synthetic.main.film_item.view.*
-
 class FilmListRecyclerAdapter(private val clickListener: OnItemClickListener):
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 //    inner class ViewHolder(val binding: FilmItemBinding):RecyclerView.ViewHolder(binding.root)
@@ -39,7 +37,5 @@ class FilmListRecyclerAdapter(private val clickListener: OnItemClickListener):
     interface OnItemClickListener{
         fun click(film: Film)
     }
-
-
 
 }

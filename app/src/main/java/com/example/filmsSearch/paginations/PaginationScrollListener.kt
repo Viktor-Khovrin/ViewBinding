@@ -1,4 +1,4 @@
-package com.example.filmsSearch.utils
+package com.example.filmsSearch.paginations
 
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
