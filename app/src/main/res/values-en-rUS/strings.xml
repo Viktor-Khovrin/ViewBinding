@@ -20,5 +20,6 @@
     <string name="go_home">Home</string>
     <string name="battery_is_low">Battery is low</string>
     <string name="power_cord">Power connected</string>
-    <string name="watch_later">Не забудьте посмотреть!</string>
+    <string name="watch_later">Don\'t forget to view!</string>
+    <string name="flavor_availability">Availavle in pro version</string>
 </resources>
