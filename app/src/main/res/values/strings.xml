@@ -17,8 +17,9 @@
     <string name="downloaded_to_gallery">Saved in Gallery</string>
     <string name="open">To Gallery</string>
     <string name="permission_storage">Denied. Add nesesary permission</string>
-    <string name="go_home">Домой</string>
+    <string name="go_home">Home</string>
     <string name="battery_is_low">Battery is low</string>
     <string name="power_cord">Power connected</string>
-    <string name="watch_later">Не забудьте посмотреть!</string>
+    <string name="flavor_availability">Availavle in pro version</string>
+    <string name="watch_later">Don\'t forget to view!</string>
 </resources>

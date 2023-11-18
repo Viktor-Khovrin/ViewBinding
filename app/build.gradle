@@ -25,6 +25,19 @@ android {
         viewBinding true
         dataBinding true
     }
+    flavorDimensions "version"
+    productFlavors{
+        free{
+            dimension "version"
+            applicationIdSuffix ".free"
+            versionNameSuffix "-free"
+        }
+        pro{
+            dimension "version"
+            applicationIdSuffix ".pro"
+            versionNameSuffix "-pro"
+        }
+    }
     buildTypes {
         release {
             minifyEnabled false
@@ -40,6 +53,18 @@ android {
     }
     namespace 'com.example.filmsSearch'
     buildToolsVersion '30.0.3'
+    sourceSets {
+        free {
+            java {
+                srcDirs 'src\\free\\java'
+            }
+        }
+        pro {
+            java {
+                srcDirs 'src\\pro\\java'
+            }
+        }
+    }
 }
 
 apply from: "$project.rootDir/versions.gradle"
@@ -100,7 +125,7 @@ dependencies {
 //    implementation 'org.greenrobot:eventbus:3.3.1'
     //ViewModels (val mainActivityViewModel: MainActivityViewModel by viewModels())
     //in Fragments by activityViewModels()
-    implementation "androidx.fragment:fragment-ktx:1.6.1"
+    implementation 'androidx.fragment:fragment-ktx:1.6.2'
     //Coroutines
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3'
