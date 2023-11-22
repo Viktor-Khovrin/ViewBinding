@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="RatingDonutView">
-        <attr name="progress" format="integer"/>
-        <attr name="stroke" format="float"/>
+        <attr name="progress" format="integer" />
+        <attr name="stroke" format="float" />
     </declare-styleable>
+
+    <style name="Widget.Theme.FilmsSearch.MyView" parent="">
+        <item name="android:background">@color/gray_400</item>
+<!--        <item name="exampleColor">@color/light_blue_400</item>-->
+    </style>
 </resources>

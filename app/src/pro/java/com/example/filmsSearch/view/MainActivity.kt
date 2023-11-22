@@ -4,11 +4,13 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.db_module.entity.Film
+import com.example.filmsSearch.App
 import com.example.filmsSearch.R
 import com.example.filmsSearch.databinding.ActivityMainBinding
 import com.example.filmsSearch.utils.PowerListener
@@ -18,6 +20,8 @@ import com.example.filmsSearch.view.fragments.HomeFragment
 import com.example.filmsSearch.view.fragments.SelectionsFragment
 import com.example.filmsSearch.view.fragments.SettingsFragment
 import com.example.filmsSearch.view.viewmodel.HomeFragmentViewModel
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig
+import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
 
 class MainActivity : AppCompatActivity() {
 
@@ -42,6 +46,7 @@ class MainActivity : AppCompatActivity() {
         registerReceiver(powerListener, filters)
         initNavigation()
         viewModel = ViewModelProvider(this)[HomeFragmentViewModel::class.java]
+        initPromoShow()
         supportFragmentManager
             .beginTransaction()
             .add(R.id.fragment_placeholder, HomeFragment())
@@ -51,6 +56,35 @@ class MainActivity : AppCompatActivity() {
             val filmExtra: Film? = intent.getParcelableExtra("film")
             if (fragmentName == "DetailsFragment" && filmExtra != null){
                 launchDetailsFragment(filmExtra)
+            }
+        }
+    }
+
+    private fun initPromoShow() {
+        if(!App.instance.isPromoShowed){
+            val fbRemoteConfig = FirebaseRemoteConfig.getInstance()
+            val fbRemoteConfigSettings = FirebaseRemoteConfigSettings.Builder()
+                .setMinimumFetchIntervalInSeconds(0).build()
+            fbRemoteConfig.setConfigSettingsAsync(fbRemoteConfigSettings)
+            fbRemoteConfig.fetchAndActivate().addOnCompleteListener {
+                if (it.isSuccessful){
+                    val filmLink = fbRemoteConfig.getString("film_link")
+                    if (filmLink.isNotBlank()){
+                        App.instance.isPromoShowed = true
+                        mainBinding.promoView
+                            .apply {
+                            visibility = View.VISIBLE
+                            animate()
+                                .setDuration(1500)
+                                .alpha(1f)
+                                .start()
+                            setLinkForPoster(filmLink)
+                            watchButton.setOnClickListener {
+                                visibility = View.GONE
+                            }
+                        }
+                    }
+                }
             }
         }
     }
