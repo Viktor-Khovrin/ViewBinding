@@ -38,10 +38,6 @@ class DetailsFragmentViewModel: ViewModel() {
         }
     }
 
-    private fun getOneFilmFromDB(filmId: Int){
-        filmLiveData.value = interactor.getOneFilmFromDB(filmId)
-    }
-
     fun putOneFilmToDB(film: Film){
         val scope = CoroutineScope(Dispatchers.IO)
         scope.launch {

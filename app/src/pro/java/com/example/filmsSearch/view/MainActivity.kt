@@ -22,6 +22,10 @@ import com.example.filmsSearch.view.fragments.SettingsFragment
 import com.example.filmsSearch.view.viewmodel.HomeFragmentViewModel
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.runBlocking
 
 class MainActivity : AppCompatActivity() {
 
@@ -69,19 +73,25 @@ class MainActivity : AppCompatActivity() {
             fbRemoteConfig.fetchAndActivate().addOnCompleteListener {
                 if (it.isSuccessful){
                     val filmLink = fbRemoteConfig.getString("film_link")
+                    val filmId: Int = fbRemoteConfig.getLong("film_id").toInt()
                     if (filmLink.isNotBlank()){
                         App.instance.isPromoShowed = true
                         mainBinding.promoView
                             .apply {
                             visibility = View.VISIBLE
                             animate()
-                                .setDuration(1500)
+                                .setDuration(500)
                                 .alpha(1f)
                                 .start()
-                            setLinkForPoster(filmLink)
-                            watchButton.setOnClickListener {
-                                visibility = View.GONE
+                            setLinkForPoster(filmLink)}
+                        mainBinding.promoView.watchButton.setOnClickListener {
+                            val deferredResult = CoroutineScope(Dispatchers.IO).async {
+                                return@async viewModel.getOneFilmFromDB(filmId)}
+                            runBlocking {
+                                val oneFilm = deferredResult.await()
+                                launchDetailsFragment(oneFilm)
                             }
+                            mainBinding.promoView.visibility = View.GONE
                         }
                     }
                 }

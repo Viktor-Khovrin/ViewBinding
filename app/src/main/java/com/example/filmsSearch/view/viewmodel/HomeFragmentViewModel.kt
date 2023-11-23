@@ -21,6 +21,8 @@ class HomeFragmentViewModel: ViewModel() {
         showProgressBar = interactor.progressBarStatus
         getFilms()
     }
+    suspend fun getOneFilmFromDB(filmId: Int): Film = interactor.getOneFilmFromDB(filmId)
+
     fun getFilms(page: Int = 1) {
         if (interactor.getCurrentQueryTime()+diffTimeout <= System.currentTimeMillis()) {
 //            filmsListFlow = interactor.getFilmsFromDB()
