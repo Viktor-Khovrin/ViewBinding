@@ -3,6 +3,7 @@ package com.example.db_module
 import com.example.db_module.dao.FilmDao
 import com.example.db_module.entity.Film
 import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.core.Single
 
 //class MainRepository(databaseHelper: DatabaseHelper) {
 //    private val sqlDB = databaseHelper.readableDatabase
@@ -52,7 +53,5 @@ class MainRepository(private val filmDao: FilmDao) {
 
     fun getAllFromDB(): Observable<List<Film>> = filmDao.getCachedFilms()
 
-    fun getById(id: Int): Film {
-        return filmDao.getOneCashedFilm(id)
-    }
+    fun getById(id: Int): Single<Film> =filmDao.getOneCashedFilm(id)
 }

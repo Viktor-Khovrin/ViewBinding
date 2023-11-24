@@ -13,7 +13,9 @@ import com.example.db_module.entity.Film
 import com.example.filmsSearch.App
 import com.example.filmsSearch.R
 import com.example.filmsSearch.databinding.ActivityMainBinding
+import com.example.filmsSearch.utils.AutoDisposable
 import com.example.filmsSearch.utils.PowerListener
+import com.example.filmsSearch.utils.addTo
 import com.example.filmsSearch.view.fragments.DetailsFragment
 import com.example.filmsSearch.view.fragments.FavoritesFragment
 import com.example.filmsSearch.view.fragments.HomeFragment
@@ -22,10 +24,8 @@ import com.example.filmsSearch.view.fragments.SettingsFragment
 import com.example.filmsSearch.view.viewmodel.HomeFragmentViewModel
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.runBlocking
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.schedulers.Schedulers
 
 class MainActivity : AppCompatActivity() {
 
@@ -33,12 +33,15 @@ class MainActivity : AppCompatActivity() {
     private lateinit var mainBinding: ActivityMainBinding
     private lateinit var viewModel: HomeFragmentViewModel
     private lateinit var powerListener: PowerListener
+    private val autoDisposable = AutoDisposable()
+
 //    lateinit var adapter: FilmListRecyclerAdapter
 //    private var isLoading: Boolean = false
 
     @SuppressLint("CommitTransaction")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        autoDisposable.bindTo(lifecycle)
         mainBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(mainBinding.root)
         supportActionBar?.hide()
@@ -70,7 +73,7 @@ class MainActivity : AppCompatActivity() {
             val fbRemoteConfigSettings = FirebaseRemoteConfigSettings.Builder()
                 .setMinimumFetchIntervalInSeconds(0).build()
             fbRemoteConfig.setConfigSettingsAsync(fbRemoteConfigSettings)
-            fbRemoteConfig.fetchAndActivate().addOnCompleteListener {
+            fbRemoteConfig.fetchAndActivate().addOnCompleteListener { it ->
                 if (it.isSuccessful){
                     val filmLink = fbRemoteConfig.getString("film_link")
                     val filmId: Int = fbRemoteConfig.getLong("film_id").toInt()
@@ -85,12 +88,11 @@ class MainActivity : AppCompatActivity() {
                                 .start()
                             setLinkForPoster(filmLink)}
                         mainBinding.promoView.watchButton.setOnClickListener {
-                            val deferredResult = CoroutineScope(Dispatchers.IO).async {
-                                return@async viewModel.getOneFilmFromDB(filmId)}
-                            runBlocking {
-                                val oneFilm = deferredResult.await()
-                                launchDetailsFragment(oneFilm)
-                            }
+                            viewModel.getOneFilmFromDB(filmId)
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe { film -> launchDetailsFragment(film)}
+                                .addTo(autoDisposable)
                             mainBinding.promoView.visibility = View.GONE
                         }
                     }

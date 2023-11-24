@@ -19,7 +19,8 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 @Entity(tableName = "cached_films", indices = [Index(value = ["title"], unique = true)])
 data class Film(
-    @PrimaryKey(autoGenerate = true) val id: Int = 0,
+    @PrimaryKey(autoGenerate = true) val intId: Int = 0,
+    @ColumnInfo(name = "id") val id: Int,
     @ColumnInfo(name = "title") val title: String,
     @ColumnInfo(name = "poster_path") val poster: String?,
     @ColumnInfo(name = "overview") val description: String,

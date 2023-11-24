@@ -9,6 +9,7 @@ object Converter {
         list?.forEach {
             result.add(
                 Film(
+                    id = it.id,
                     title = it.name,
                     poster = it.poster.url,
                     description = it.description,

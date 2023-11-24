@@ -8,7 +8,8 @@ class DatabaseHelper(context: Context): SQLiteOpenHelper(context, DATABASE_NAME,
     override fun onCreate(db: SQLiteDatabase?) {
         db?.execSQL(
             "CREATE TABLE $TABLE_NAME (" +
-                    "$COLUMN_ID INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    "$COLUMN_INTID INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    "$COLUMN_ID INTEGER UNIQUE," +
                     "$COLUMN_TITLE TEXT UNIQUE," +
                     "$COLUMN_POSTER TEXT," +
                     "$COLUMN_DESCRIPTION TEXT," +
@@ -24,6 +25,7 @@ class DatabaseHelper(context: Context): SQLiteOpenHelper(context, DATABASE_NAME,
         private const val DATABASE_VERSION = 1
 
         const val TABLE_NAME = "films_table"
+        const val COLUMN_INTID = "intId"
         const val COLUMN_ID = "id"
         const val COLUMN_TITLE = "title"
         const val COLUMN_POSTER = "poster_path"
