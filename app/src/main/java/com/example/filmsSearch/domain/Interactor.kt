@@ -10,6 +10,7 @@ import com.example.filmsSearch.utils.ApiKey
 import com.example.filmsSearch.utils.Converter
 import com.example.remote_module.TmdbApi
 import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.kotlin.subscribeBy
 import io.reactivex.rxjava3.schedulers.Schedulers
 import io.reactivex.rxjava3.subjects.BehaviorSubject
@@ -50,7 +51,7 @@ class Interactor(private val repo: MainRepository,
 
     fun getFilmsFromDB(): Observable<List<Film>> = repo.getAllFromDB()
 
-    fun getOneFilmFromDB(id: Int): Film = repo.getById(id)
+    fun getOneFilmFromDB(id: Int): Single<Film> = repo.getById(id)
 
     fun updateFilmInDb(film: Film) {
         repo.updateInDb(film)

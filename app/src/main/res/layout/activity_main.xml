@@ -25,5 +25,12 @@
         app:labelVisibilityMode="labeled"
         app:layout_constraintBottom_toBottomOf="parent"
         app:menu="@menu/navigation_menu" />
+    <com.example.filmsSearch.view.customviews.PromoView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/promo_view"
+        android:translationZ="10dp"
+        android:alpha="0"
+        android:visibility="gone"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

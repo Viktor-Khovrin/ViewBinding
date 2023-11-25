@@ -5,6 +5,7 @@ import com.example.db_module.entity.Film
 import com.example.filmsSearch.App
 import com.example.filmsSearch.domain.Interactor
 import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.subjects.BehaviorSubject
 import javax.inject.Inject
 
@@ -21,6 +22,8 @@ class HomeFragmentViewModel: ViewModel() {
         showProgressBar = interactor.progressBarStatus
         getFilms()
     }
+    fun getOneFilmFromDB(filmId: Int): Single<Film> = interactor.getOneFilmFromDB(filmId)
+
     fun getFilms(page: Int = 1) {
         if (interactor.getCurrentQueryTime()+diffTimeout <= System.currentTimeMillis()) {
 //            filmsListFlow = interactor.getFilmsFromDB()

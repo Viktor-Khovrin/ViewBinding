@@ -22,4 +22,6 @@
     <string name="power_cord">Power connected</string>
     <string name="flavor_availability">Availavle in pro version</string>
     <string name="watch_later">Don\'t forget to view!</string>
+    <string name="text_image_promo">Посмотри фильм:</string>
+    <string name="text_btn_promo">Смотреть</string>
 </resources>

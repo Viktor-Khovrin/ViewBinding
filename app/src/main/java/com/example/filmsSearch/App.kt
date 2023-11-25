@@ -15,6 +15,7 @@ import com.example.remote_module.RemoteModule
 
 class App : Application() {
     lateinit var dagger: AppComponent
+    var isPromoShowed: Boolean = false
 
     override fun onCreate() {
         super.onCreate()

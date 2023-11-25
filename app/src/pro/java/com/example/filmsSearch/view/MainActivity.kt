@@ -4,20 +4,28 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.db_module.entity.Film
+import com.example.filmsSearch.App
 import com.example.filmsSearch.R
 import com.example.filmsSearch.databinding.ActivityMainBinding
+import com.example.filmsSearch.utils.AutoDisposable
 import com.example.filmsSearch.utils.PowerListener
+import com.example.filmsSearch.utils.addTo
 import com.example.filmsSearch.view.fragments.DetailsFragment
 import com.example.filmsSearch.view.fragments.FavoritesFragment
 import com.example.filmsSearch.view.fragments.HomeFragment
 import com.example.filmsSearch.view.fragments.SelectionsFragment
 import com.example.filmsSearch.view.fragments.SettingsFragment
 import com.example.filmsSearch.view.viewmodel.HomeFragmentViewModel
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig
+import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.schedulers.Schedulers
 
 class MainActivity : AppCompatActivity() {
 
@@ -25,12 +33,15 @@ class MainActivity : AppCompatActivity() {
     private lateinit var mainBinding: ActivityMainBinding
     private lateinit var viewModel: HomeFragmentViewModel
     private lateinit var powerListener: PowerListener
+    private val autoDisposable = AutoDisposable()
+
 //    lateinit var adapter: FilmListRecyclerAdapter
 //    private var isLoading: Boolean = false
 
     @SuppressLint("CommitTransaction")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        autoDisposable.bindTo(lifecycle)
         mainBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(mainBinding.root)
         supportActionBar?.hide()
@@ -42,6 +53,7 @@ class MainActivity : AppCompatActivity() {
         registerReceiver(powerListener, filters)
         initNavigation()
         viewModel = ViewModelProvider(this)[HomeFragmentViewModel::class.java]
+        initPromoShow()
         supportFragmentManager
             .beginTransaction()
             .add(R.id.fragment_placeholder, HomeFragment())
@@ -51,6 +63,40 @@ class MainActivity : AppCompatActivity() {
             val filmExtra: Film? = intent.getParcelableExtra("film")
             if (fragmentName == "DetailsFragment" && filmExtra != null){
                 launchDetailsFragment(filmExtra)
+            }
+        }
+    }
+
+    private fun initPromoShow() {
+        if(!App.instance.isPromoShowed){
+            val fbRemoteConfig = FirebaseRemoteConfig.getInstance()
+            val fbRemoteConfigSettings = FirebaseRemoteConfigSettings.Builder()
+                .setMinimumFetchIntervalInSeconds(0).build()
+            fbRemoteConfig.setConfigSettingsAsync(fbRemoteConfigSettings)
+            fbRemoteConfig.fetchAndActivate().addOnCompleteListener { it ->
+                if (it.isSuccessful){
+                    val filmLink = fbRemoteConfig.getString("film_link")
+                    val filmId: Int = fbRemoteConfig.getLong("film_id").toInt()
+                    if (filmLink.isNotBlank()){
+                        App.instance.isPromoShowed = true
+                        mainBinding.promoView
+                            .apply {
+                            visibility = View.VISIBLE
+                            animate()
+                                .setDuration(500)
+                                .alpha(1f)
+                                .start()
+                            setLinkForPoster(filmLink)}
+                        mainBinding.promoView.watchButton.setOnClickListener {
+                            viewModel.getOneFilmFromDB(filmId)
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe { film -> launchDetailsFragment(film)}
+                                .addTo(autoDisposable)
+                            mainBinding.promoView.visibility = View.GONE
+                        }
+                    }
+                }
             }
         }
     }

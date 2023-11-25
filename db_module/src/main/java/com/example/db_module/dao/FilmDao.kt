@@ -7,6 +7,7 @@ import androidx.room.Query
 import androidx.room.Update
 import com.example.db_module.entity.Film
 import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.core.Single
 
 @Dao
 interface FilmDao {
@@ -27,5 +28,5 @@ interface FilmDao {
     fun clearCachedFilms()
 
     @Query("SELECT * FROM cached_films WHERE id =:id")
-    fun getOneCashedFilm(id: Int): Film
+    fun getOneCashedFilm(id: Int): Single<Film>
 }
